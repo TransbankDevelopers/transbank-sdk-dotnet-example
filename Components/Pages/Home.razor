@@ -1,40 +1,41 @@
 ﻿@page "/"
+@attribute [Layout(typeof(HomeLayout))]
 
  <div class="flex-col">
-            <div class="tbk-home-container">
-                <h1 class="title">Proyecto de Ejemplo del SDK para .NET</h1>
-                <div class="tbk-home-intro">
-                    <img src="net.svg" alt="Node.js Logo" class="aling-self-start self-center" width="168"
-                        height="120" />
-                    <p class="tbk-home-text">
-                        Este proyecto te brinda la oportunidad experimentar con las diversas
-                        modalidades de productos que Transbank ofrece a través de su SDK
-                        compatible con .NET. Conoce de manera práctica las soluciones y
-                        servicios que Transbank pone a tu disposición, permitiéndote
-                        comprender cómo integrar estas herramientas tecnológicas en tus
-                        proyectos y aplicaciones. ¡Explora las opciones disponibles y
-                        descubre cómo aprovechar al máximo estas capacidades!
-                    </p>
+    <div class="tbk-home-container">
+        <h1 class="title">Proyecto de Ejemplo del SDK para .NET</h1>
+        <div class="tbk-home-intro">
+            <img src="net.svg" alt="Node.js Logo" class="aling-self-start self-center" width="168"
+                height="120" />
+            <p class="tbk-home-text">
+                Este proyecto te brinda la oportunidad experimentar con las diversas
+                modalidades de productos que Transbank ofrece a través de su SDK
+                compatible con .NET. Conoce de manera práctica las soluciones y
+                servicios que Transbank pone a tu disposición, permitiéndote
+                comprender cómo integrar estas herramientas tecnológicas en tus
+                proyectos y aplicaciones. ¡Explora las opciones disponibles y
+                descubre cómo aprovechar al máximo estas capacidades!
+            </p>
+        </div>
+
+        <hr class="separed-home" />
+
+        <div class="cards-info-container">
+            <div class="card-info ">
+                <div class="card-info-body ">
+                    <img src="webpay.svg" alt="webpay" width="300" height="74"
+                        class="card-info-image" />
+                    <p class="card-info-text">El producto más usado para realizar un pago online. Se genera
+                        un único cobro para todos los productos o servicios adquiridos por el tarjetahabiente
+                        (carro de compras). </p>
                 </div>
-
-                <hr class="separed-home" />
-
-                <div class="cards-info-container">
-                    <div class="card-info ">
-                        <div class="card-info-body ">
-                            <img src="webpay.svg" alt="webpay" width="300" height="74"
-                                class="card-info-image" />
-                            <p class="card-info-text">El producto más usado para realizar un pago online. Se genera
-                                un único cobro para todos los productos o servicios adquiridos por el tarjetahabiente
-                                (carro de compras). </p>
-                        </div>
-                        <a href="/webpay-plus" class="card-info-link">
-                            Ver ejemplos y modalidades
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="separed-home" />
-
+                <a href="/webpay-plus" class="card-info-link">
+                    Ver ejemplos y modalidades
+                </a>
             </div>
         </div>
+
+        <hr class="separed-home" />
+
+    </div>
+</div>
