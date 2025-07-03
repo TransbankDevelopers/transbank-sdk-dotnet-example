@@ -1,6 +1,7 @@
 @page "/webpay-plus/refund"
 @rendermode InteractiveServer
 @using TransbankSdkDotnetExample.Services
+@using TransbankSdkDotnetExample.Utils
 @using Transbank.Webpay.WebpayPlus.Responses
 @using System.Text.Json
 @inject AppState AppState
@@ -50,7 +51,7 @@
 
 <pre>
     <code class="language-json mb-32">
-    @JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true })
+    @JsonSerializer.Serialize(ResponseUtils.ToMap(AppState.RefundResponse!), new JsonSerializerOptions { WriteIndented = true })
     </code>
 </pre>
 
@@ -60,10 +61,8 @@
 
 @code {
   private string token = "";
-  private RefundResponse? response;
   protected override void OnInitialized()
   {
-    response = AppState.RefundResponse;
     var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
     var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
     token = query.TryGetValue("token", out var value1) ? value1.ToString() : "";

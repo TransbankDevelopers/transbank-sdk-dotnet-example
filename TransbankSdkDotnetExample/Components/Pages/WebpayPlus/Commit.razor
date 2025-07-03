@@ -1,6 +1,7 @@
 @page "/webpay-plus/commit"
 @rendermode InteractiveServer
 @using TransbankSdkDotnetExample.Services
+@using TransbankSdkDotnetExample.Utils
 @using Transbank.Webpay.WebpayPlus.Responses
 @using System.Text.Json
 @inject WebpayPlusService webpayPlusService
@@ -47,7 +48,7 @@
 
 <pre>
     <code class="language-json mb-32">
-    @JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true })
+    @JsonSerializer.Serialize(ResponseUtils.ToMap(response!), new JsonSerializerOptions { WriteIndented = true })
     </code>
 </pre>
 
