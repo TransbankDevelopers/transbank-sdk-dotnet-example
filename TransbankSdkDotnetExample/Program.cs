@@ -1,8 +1,11 @@
 using TransbankSdkDotnetExample.Components;
+using TransbankSdkDotnetExample.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<WebpayPlusService>();
+builder.Services.AddScoped<AppState>();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
@@ -24,4 +27,4 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.Run();
+await app.RunAsync();

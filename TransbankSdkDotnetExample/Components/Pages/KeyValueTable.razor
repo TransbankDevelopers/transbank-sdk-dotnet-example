@@ -1,0 +1,45 @@
+@using System.Collections
+@using System.Collections.Generic
+
+@typeparam TValue
+
+<div class="mb-32">
+    <div class="tbk-table">
+    <div class="table-column tbk-head">Campo</div>
+    <div class="table-column tbk-head">Valor</div>
+
+    @if (Data != null)
+    {
+        foreach (var entry in Data)
+        {
+            <div class="table-column">@entry.Key</div>
+            <div class="table-column">
+                @if (entry.Key == "details" && entry.Value is IEnumerable<object> list)
+                {
+                    foreach (var detail in list)
+                    {
+                        <div class="details-item">
+                            @if (detail is Dictionary<string, object> detailMap)
+                            {
+                                foreach (var kv in detailMap)
+                                {
+                                    <div><strong>@kv.Key</strong>: @kv.Value</div>
+                                }
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    @entry.Value
+                }
+            </div>
+        }
+    }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Dictionary<string, TValue>? Data { get; set; }
+}

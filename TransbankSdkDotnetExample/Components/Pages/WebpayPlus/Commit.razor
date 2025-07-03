@@ -1,0 +1,105 @@
+@page "/webpay-plus/commit"
+@rendermode InteractiveServer
+@using TransbankSdkDotnetExample.Services
+@using TransbankSdkDotnetExample.Utils
+@using Transbank.Webpay.WebpayPlus.Responses
+@using System.Text.Json
+@inject WebpayPlusService webpayPlusService
+@inject AppState AppState
+@inject NavigationManager Navigation
+@inherits HighlightedComponent
+
+<h1>Webpay Plus - Confirmar transacción</h1>
+
+<p class="mb-32">
+  En este paso es importante confirmar la transacción para notificar a Transbank que hemos recibido exitosamente los detalles de la transacción.
+  <b>Es importante destacar que si la confirmación no se realiza, la transacción será caducada.</b>
+</p>
+
+<h2 id="data">Paso 1 - Datos recibidos:</h2>
+<ul class="mb-32">
+  <p class="m-32">
+    Después de completar el flujo en el formulario de pago, recibirás un GET con la siguiente información:
+  </p>
+</ul>
+
+<pre>
+  <code class="language-csharp mb-32">
+      @Navigation.Uri
+  </code>
+</pre>
+
+<h2 id="request">Paso 2 - Petición:</h2>
+<p class="mb-32">
+  Utilizarás el token recibido para confirmar la transacción mediante el SDK.
+</p>
+
+<pre>
+  <code class="language-csharp mb-32">
+  var response = tx.Commit(token);
+  </code>
+</pre>
+
+<h2 id="response">Paso 3 - Respuesta:</h2>
+<p class="mb-32">
+  Una vez que la transacción ha sido confirmada, Transbank proporcionará la siguiente información. 
+  Es fundamental conservar esta respuesta y verificar que el campo "response_code" tenga un valor de cero y que el campo "status" sea "AUTHORIZED".
+</p>
+
+<pre>
+    <code class="language-json mb-32">
+    @JsonSerializer.Serialize(ResponseUtils.ToMap(response!), new JsonSerializerOptions { WriteIndented = true })
+    </code>
+</pre>
+
+<h2>¡Listo!</h2>
+<p class="mb-32">
+  Con la confirmación exitosa, ya puedes mostrar al usuario una página de éxito de la transacción, proporcionándole la tranquilidad de que el proceso ha sido completado con éxito.
+</p>
+
+<p class="mb-16" id="operations">
+  Después de confirmar la transacción, podrás realizar otras operaciones útiles:
+</p>
+<ul class="bullet-list mb-32">
+  <li><span class="fw-700">Reembolsar:</span> Puedes reversar o anular el pago según ciertas condiciones comerciales.</li>
+  <li><span class="fw-700">Consultar Estado:</span> Hasta 7 días después de la transacción, podrás consultar el estado de la transacción.</li>
+</ul>
+
+@if (!string.IsNullOrEmpty(token))
+{
+  <div class="tbk-refund-card mb-32">
+      <div class="input-container">
+          <label class="tbk-label" for="amount">Monto a reembolsar:</label>
+          <InputNumber @bind-Value="amount" class="tbk-input-text" />
+      </div>
+
+      <div class="tbk-refund-button-container">
+          <button class="tbk-button primary" @onclick="Refund">REEMBOLSAR</button>
+          <a class="tbk-button primary" href="/webpay-plus/status?token=@token">
+              CONSULTAR ESTADO
+          </a>
+      </div>
+  </div>
+}
+
+
+@code {
+  private string? token;
+  private decimal? amount;
+  private CommitResponse? response;
+  protected override void OnInitialized()
+  {
+      var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+      var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+      token = query.TryGetValue("token_ws", out var value) ? value.ToString() : "";
+      response = webpayPlusService.Commit(token);
+      amount = response.Amount;
+  }
+
+  private void Refund()
+  {
+      AppState.RefundResponse = webpayPlusService.Refund(token ?? "", amount ?? 0);
+      Navigation.NavigateTo($"/webpay-plus/refund?token={token}");
+  }
+}
+
