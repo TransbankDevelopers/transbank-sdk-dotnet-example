@@ -1,0 +1,73 @@
+@page "/webpay-plus/refund"
+@rendermode InteractiveServer
+@using TransbankSdkDotnetExample.Services
+@using Transbank.Webpay.WebpayPlus.Responses
+@using System.Text.Json
+@inject AppState AppState
+@inject NavigationManager Navigation
+@inherits HighlightedComponent
+
+
+<h1>Webpay Plus - Reembolsar</h1>
+<p class="mb-32">
+  En esta etapa, tienes la opción de solicitar el reembolso del monto al titular de la tarjeta. 
+  Dependiendo del monto y el tiempo transcurrido desde la transacción, este proceso podría resultar en una Reversa o Anulación, 
+  dependiendo de ciertas condiciones (Reversa en las primeras 3 horas de la autorización, anulación posterior a eso), 
+  o una Anulación parcial si el monto es menor al total. Las anulaciones parciales para tarjetas débito y prepago no están soportadas.
+</p>
+
+<h2 id="request">Paso 1 - Petición:</h2>
+<p class="mb-32">
+  Para llevar a cabo el reembolso, necesitas proporcionar el token de la transacción y el monto que deseas reversar. 
+  Si anulas el monto total, podría ser una Reversa o Anulación, dependiendo de ciertas condiciones 
+  (Reversa en las primeras 3 horas de la autorización, anulación posterior a eso), o una Anulación Parcial si el monto es menor al total.
+</p>
+
+<p class="mb-16">
+    Algunas consideraciones a tener en cuenta:
+</p>
+<ul class="bullet-list mb-32">
+  <li>No es posible realizar Anulaciones Parciales en pagos con cuotas.</li>
+</ul>
+
+<p class="mb-32">
+  En
+  <a href="https://www.transbankdevelopers.cl/producto/webpay#anulaciones-y-reversas" target="_blank" class="tbk-link">este link</a>
+  podrás ver mayor información sobre las condiciones y casos para anular o reversar transacciones.
+</p>
+
+<pre>
+  <code class="language-csharp mb-32">
+  var response = tx.Refund(token, amount);
+  </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+  Transbank responderá con el resultado del proceso de reembolso, indicando si se ha realizado una
+  Reversa, Anulación o Anulación Parcial.
+</p>
+
+<pre>
+    <code class="language-json mb-32">
+    @JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true })
+    </code>
+</pre>
+
+<a class="tbk-button primary mb-32" href="/webpay-plus/status?token=@token">
+    CONSULTAR ESTADO
+</a>
+
+@code {
+  private string token = "";
+  private RefundResponse? response;
+  protected override void OnInitialized()
+  {
+    response = AppState.RefundResponse;
+    var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+    var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+    token = query.TryGetValue("token", out var value1) ? value1.ToString() : "";
+  }
+
+}
+
