@@ -1,0 +1,113 @@
+@page "/webpay-plus"
+@rendermode InteractiveServer
+@using TransbankSdkDotnetExample.Services
+@using TransbankSdkDotnetExample.Utils
+@using Transbank.Webpay.WebpayPlus.Responses
+@using System.Text.Json
+@inject WebpayPlusService webpayPlusService
+@inject NavigationManager Navigation
+@inherits HighlightedComponent
+
+<h1>Webpay Plus - Creación de transacción</h1>
+<p class="mb-32">
+  En esta etapa, se procederá a la creación de una transacción con el fin de obtener un identificador único.
+  Esto nos permitirá redirigir al Tarjetahabiente hacia el formulario de pago en el siguiente paso.
+</p>
+
+<p class="mb-32">
+  Todas las transacciones en este proyecto de ejemplo son realizadas en
+          ambiente de integración.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<ol class="bullet-list mb-32">
+  <li>Comienza por importar la librería WebpayPlus en tu proyecto.</li>
+  <li>Luego, crea una transacción utilizando las funciones proporcionadas mediante el SDK.</li>
+</ol>
+
+<pre>
+  <code class="language-csharp mb-32">
+    var tx = Transaction.buildForIntegration(commerceCode, apiKey);
+
+    var buyOrder = "O-10000";
+    var sessionId = "S-10000";
+    var amount = 1000;
+    var returnUrl = "@Navigation.BaseUri.TrimEnd('/')/webpay-plus/commit";
+    tx.Create(buyOrder, sessionId, amount, returnUrl);
+  </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+  Una vez que hayas creado la transacción, aquí encontrarás los datos de respuesta generados por el proceso.
+</p>
+
+<pre>
+    <code class="language-json mb-32">
+    @JsonSerializer.Serialize(ResponseUtils.ToMap(response!), new JsonSerializerOptions { WriteIndented = true })
+    </code>
+</pre>
+
+<h2 id="form">Paso 3: Creación del formulario</h2>
+<p class="mb-32">
+  Utiliza estos datos de respuesta para redireccionar al usuario al formulario de pago al Tarjetahabiente.
+  Este formulario será la interfaz a través de la cual el usuario realizará su transacción.
+</p>
+
+<pre>
+  <code class="language-html mb-32">
+@html
+  </code>
+</pre>
+
+<h2 id="example">Ejemplo</h2>
+<p class="mb-32">
+  Para llevar a cabo una transacción de compra en nuestro sistema, primero debemos crear la transacción. Utilizaremos
+  los siguientes datos para configurar la transacción:
+</p>
+
+<KeyValueTable TValue="object" Data="requestData" />
+
+<p class="mb-32">
+  Por último, con la respuesta del servicio que confirma la creación de la transacción, procedemos a crear el
+  formulario de pago. Para fines de este ejemplo, haremos visible el campo "token_ws", el cual es esencial para
+  completar el proceso de pago de manera exitosa.
+</p>
+
+<span>
+  Antes de continuar al formulario de Webpay, asegúrate de contar con los datos de las tarjetas de prueba que están en la
+  <a href="https://transbankdevelopers.cl/documentacion/como_empezar#tarjetas-de-prueba" class="tbk-link">documentación</a>
+</span>
+
+@if (response != null)
+{
+    <form action="@response.Url" method="POST">
+        <div class="tbk-card">
+            <span class="tbk-card-title">Formulario de redirección</span>
+            <label class="tbk-label" for="token_ws">Token</label>
+            <input type="text" name="token_ws" class="tbk-input-text" value="@response.Token" />
+            <div class="tbk-card-footer">
+                <button class="tbk-button primary">PAGAR</button>
+            </div>
+        </div>
+    </form>
+}
+
+@code {
+    private string html = "";
+    private Dictionary<string, object> requestData = new();
+    private CreateResponse? response;
+    protected override void OnInitialized()
+    {
+        response = webpayPlusService.Create(Navigation.BaseUri.TrimEnd('/'));
+        requestData = JsonSerializer.Deserialize<Dictionary<string, object>>(response.OriginalRequest) ?? new Dictionary<string, object>();
+        html = $""""
+        <form action="{response.Url}" method="POST">
+          <input type="hidden" name="token_ws" value="{response.Token}" />
+          <input type="submit" value="Pagar" />
+        </form>
+        """";
+    }
+
+}
+
