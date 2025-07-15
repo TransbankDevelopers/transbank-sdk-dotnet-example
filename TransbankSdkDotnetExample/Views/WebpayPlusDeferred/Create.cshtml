@@ -26,7 +26,7 @@
     var buyOrder = "O-10000";
     var sessionId = "S-10000";
     var amount = 1000;
-    var returnUrl = @ViewBag.baseUrl/webpay-plus/commit;
+    var returnUrl = @ViewBag.baseUrl/webpay-plus-deferred/commit;
     CreateResponse createResponse = tx.Create(buyOrder, sessionId, amount, returnUrl);
   </code>
 </pre>
