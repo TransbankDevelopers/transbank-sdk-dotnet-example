@@ -1,13 +1,7 @@
-@page "/webpay-plus/commit"
-@rendermode InteractiveServer
-@using TransbankSdkDotnetExample.Services
-@using TransbankSdkDotnetExample.Utils
-@using Transbank.Webpay.WebpayPlus.Responses
-@using System.Text.Json
-@inject WebpayPlusService webpayPlusService
-@inject AppState AppState
-@inject NavigationManager Navigation
-@inherits HighlightedComponent
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <h1>Webpay Plus - Confirmar transacción</h1>
 
@@ -24,8 +18,8 @@
 </ul>
 
 <pre>
-  <code class="language-csharp mb-32">
-      @Navigation.Uri
+  <code class="language-txt mb-32">
+@ViewBag.url
   </code>
 </pre>
 
@@ -47,8 +41,7 @@
 </p>
 
 <pre>
-    <code class="language-json mb-32">
-    @JsonSerializer.Serialize(ResponseUtils.ToMap(response!), new JsonSerializerOptions { WriteIndented = true })
+    <code class="language-json mb-32">@Html.Raw(ViewBag.response)
     </code>
 </pre>
 
@@ -65,41 +58,20 @@
   <li><span class="fw-700">Consultar Estado:</span> Hasta 7 días después de la transacción, podrás consultar el estado de la transacción.</li>
 </ul>
 
-@if (!string.IsNullOrEmpty(token))
-{
-  <div class="tbk-refund-card mb-32">
-      <div class="input-container">
-          <label class="tbk-label" for="amount">Monto a reembolsar:</label>
-          <InputNumber @bind-Value="amount" class="tbk-input-text" />
-      </div>
-
-      <div class="tbk-refund-button-container">
-          <button class="tbk-button primary" @onclick="Refund">REEMBOLSAR</button>
-          <a class="tbk-button primary" href="/webpay-plus/status?token=@token">
-              CONSULTAR ESTADO
-          </a>
-      </div>
-  </div>
-}
-
-
-@code {
-  private string? token;
-  private decimal? amount;
-  private CommitResponse? response;
-  protected override void OnInitialized()
-  {
-      var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-      var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-      token = query.TryGetValue("token_ws", out var value) ? value.ToString() : "";
-      response = webpayPlusService.Commit(token);
-      amount = response.Amount;
-  }
-
-  private void Refund()
-  {
-      AppState.RefundResponse = webpayPlusService.Refund(token ?? "", amount ?? 0);
-      Navigation.NavigateTo($"/webpay-plus/refund?token={token}");
-  }
-}
-
+<form action="/webpay-plus/refund" method="GET">
+    <div class="tbk-card mb-32">
+        <div class="tbk-capture-section">
+            <div class="input-container">
+                <label for="amount" class="tbk-label">Monto a reembolsar:</label>
+                <input type="number" name="amount" class="tbk-input-text" value="@ViewBag.amount"/>
+                <input type="hidden" name="token" value="@ViewBag.token">
+            </div>
+            <div class="tbk-button-container">
+            <button class="tbk-button primary">REEMBOLSAR</button>
+            <a class="tbk-button primary" href="/webpay-plus/status?token=@ViewBag.token">
+                CONSULTAR ESTADO
+            </a>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,14 +1,7 @@
-@page "/webpay-plus/status"
-@rendermode InteractiveServer
-@using TransbankSdkDotnetExample.Services
-@using TransbankSdkDotnetExample.Utils
-@using Transbank.Webpay.WebpayPlus.Responses
-@using System.Text.Json
-@inject WebpayPlusService webpayPlusService
-@inject NavigationManager Navigation
-@inherits HighlightedComponent
-
-
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <h1>Webpay Plus - Consultar estado de transacción</h1>
 <p class="mb-32">
@@ -36,22 +29,6 @@
 
 <pre>
     <code class="language-json mb-32">
-    @JsonSerializer.Serialize(ResponseUtils.ToMap(response!), new JsonSerializerOptions { WriteIndented = true })
+        @Html.Raw(ViewBag.response)
     </code>
 </pre>
-
-
-@code {
-    private string token = "";
-    private StatusResponse? response;
-    protected override void OnInitialized()
-    {
-        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-        token = query.TryGetValue("token", out var value) ? value.ToString() : "";
-
-        response = webpayPlusService.Status(token);
-    }
-
-}
-
