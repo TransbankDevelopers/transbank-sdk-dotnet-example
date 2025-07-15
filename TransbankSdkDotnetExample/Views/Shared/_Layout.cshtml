@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="~/css/atom-one-dark.min.css" />
 </head>
 <body class="main-container">
-    @Html.Partial("_Header")
+    <partial name="_Header" />
     <main role="main" class="body-container">
-        @Html.Partial("_Menu")
+        <partial name="_Menu" />
         <article class="body-content">
             @RenderBody()
-        @Html.Partial("_Channels")
+        <partial name="_Channels" />
         </article>
     </main>
-    @Html.Partial("_Footer")
+    <partial name="_Footer" />
     <script src="@Url.Content("~/js/highlight.min.js")"></script>
     <script src="@Url.Content("~/js/highlight-init.js")"></script>  
 </body>
