@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Transbank SDK</title>
+    <link rel="stylesheet" href="~/css/app.css" />
+    <link rel="stylesheet" href="~/css/atom-one-dark.min.css" />
+</head>
+<body class="main-container">
+    @Html.Partial("_Header")
+    <main role="main" class="body-container">
+        @Html.Partial("_Menu")
+        <article class="body-content">
+            @RenderBody()
+        </article>
+    </main>
+    @Html.Partial("_Footer")
+    <script src="@Url.Content("~/js/highlight.min.js")"></script>
+    <script src="@Url.Content("~/js/highlight-init.js")"></script>  
+</body>
+</html>
