@@ -76,6 +76,4 @@ public class WebpayPlusDeferredController : Controller
         ViewBag.amount = (int)commitResponse.CapturedAmount;
         return View();
     }
-
-
 }
