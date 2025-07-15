@@ -1,0 +1,135 @@
+<aside class="tbk-sidebar" id="sidebar-desk">
+    <div class="toogle-btn-container">
+        <button class="tbk-toggle-btn" id="toggle-sidebar-btn">
+            &lt;
+        </button>
+    </div>
+
+    <nav class="sidebar-content" id="sidebar-content">
+        <div>
+            <p class="tbk-sidebar-item-title">Webpay Plus</p>
+            <ul>
+                <li style="margin-bottom:20px;">
+                    <button class="sidebar-collapsible-title" data-collapsible="webpay-plus">
+                        <span class="general-text">Webpay Plus</span>
+                        <img src="~/t-arrow.svg" class="arrow" alt="t-arrow" width="24"
+                            height="24" />
+                    </button>
+                    <ul class="collapsible-content" id="collapse-webpay-plus">
+                        <li class="collapsible-items">
+                            <a href="/webpay-plus" class="tbk-sidebar-item">
+                                Flujo Completo
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li style="margin-bottom:20px;">
+                    <button class="sidebar-collapsible-title" data-collapsible="webpay-plus-deferred">
+                        <span class="general-text">Webpay Plus Diferido</span>
+                        <img src="~/t-arrow.svg" class="arrow" alt="t-arrow" width="24"
+                            height="24" />
+                    </button>
+                    <ul class="collapsible-content" id="collapse-webpay-plus-deferred">
+                        <li class="collapsible-items">
+                            <a href="/webpay-plus-deferred/create" class="tbk-sidebar-item">
+                                Flujo Completo
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <hr class="sidebar-divider" />
+        </div>
+    </nav>
+</aside>
+
+<script>
+    const toggleBtn = document.getElementById('toggle-sidebar-btn');
+    const sidebar = document.getElementById('sidebar-desk');
+    const bodyContainer = document.querySelector('.body-container');
+
+    let isMenuVisible = true;
+    toggleBtn.addEventListener('click', () => {
+        isMenuVisible = !isMenuVisible;
+        if (!isMenuVisible) {
+            sidebar.classList.add("tbk-sidebar-hide");
+            bodyContainer.classList.add("hide-sd");
+        } else {
+            sidebar.classList.remove("tbk-sidebar-hide");
+            bodyContainer.classList.remove("hide-sd");
+        }
+    });
+
+
+    const collapsibleTitles = document.querySelectorAll('.sidebar-collapsible-title');
+    collapsibleTitles.forEach(title => {
+        title.addEventListener('click', () => {
+            const content = title.nextElementSibling;
+            const arrow = title.querySelector('.arrow');
+            if (!content) return;
+
+            content.classList.toggle('open');
+            arrow.classList.toggle('sidebar-icons-rotate');
+        });
+    });
+
+
+    function highlightByCurrentPath(currentPath) {
+        document.querySelectorAll("li.collapsible-items > a").forEach((anchor) => {
+            const linkPath = anchor.getAttribute("href") || "";
+
+            if (currentPath === linkPath) {
+                const liItem = anchor.parentElement;
+                liItem.classList.add("active");
+
+                const collapsibleUl = liItem.closest(".collapsible-content");
+                if (collapsibleUl) {
+                    collapsibleUl.classList.add("open");
+
+                    const collapsibleButton = collapsibleUl.previousElementSibling;
+                    if (collapsibleButton) {
+                        const icon = collapsibleButton.querySelector("img");
+                        if (icon) icon.classList.add("sidebar-icons-rotate");
+                    }
+                }
+            }
+        });
+    }
+
+    function highlightPrincipalPath(principalPath) {
+        document.querySelectorAll("li.collapsible-items > a").forEach((anchor) => {
+            const linkPath = anchor.getAttribute("href") || "";
+            const principalLinkPath = linkPath.split("/")[1];
+            const activeCurrentAnchor = principalLinkPath === principalPath
+
+            if (activeCurrentAnchor) {
+                const liItem = anchor.parentElement;
+                liItem.classList.add("active");
+
+                const collapsibleUl = liItem.closest(".collapsible-content");
+                if (collapsibleUl) {
+                    collapsibleUl.classList.add("open");
+
+                    const collapsibleButton = collapsibleUl.previousElementSibling;
+                    if (collapsibleButton) {
+                        const icon = collapsibleButton.querySelector("img");
+                        if (icon) icon.classList.add("sidebar-icons-rotate");
+                    }
+                }
+            }
+        });
+    }
+
+    (function highlightActiveByUrl() {
+        const currentPath = window.location.pathname;
+        const principalPath = currentPath.split("/")[1];
+
+        if (currentPath.startsWith('/api-reference')) {
+            highlightByCurrentPath(currentPath)
+        } else {
+            highlightPrincipalPath(principalPath)
+        }
+
+
+    })();
+</script>
