@@ -45,7 +45,7 @@ public class WebpayPlusDeferredController : Controller
         ViewBag.token = token_ws;
         ViewBag.buyOrder = commitResponse.BuyOrder;
         ViewBag.authorizationCode = commitResponse.AuthorizationCode;
-        ViewBag.amount = (int)commitResponse.Amount;
+        ViewBag.amount = (int)(commitResponse.Amount ?? 0);
         ViewBag.url = $"{Request.Scheme}://{Request.Host}{Request.Path}{Request.QueryString}";
         return View();
     }
@@ -73,7 +73,7 @@ public class WebpayPlusDeferredController : Controller
         CaptureResponse commitResponse = _transaction.Capture(token, buyOrder, authorizationCode, captureAmount);
         ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(commitResponse!), new JsonSerializerOptions { WriteIndented = true });
         ViewBag.token = token;
-        ViewBag.amount = (int)commitResponse.CapturedAmount;
+        ViewBag.amount = (int)(commitResponse.CapturedAmount ?? 0);
         return View();
     }
 }
