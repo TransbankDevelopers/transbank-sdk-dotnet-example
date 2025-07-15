@@ -5,3 +5,4 @@ window.highlightAllCodeBlocks = () => {
         });
     }
 };
+window.highlightAllCodeBlocks();
