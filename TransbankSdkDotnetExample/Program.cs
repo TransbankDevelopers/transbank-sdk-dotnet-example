@@ -8,6 +8,7 @@ builder.Services.AddScoped<WebpayPlusService>();
 builder.Services.AddScoped<AppState>();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -24,6 +25,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+    
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
