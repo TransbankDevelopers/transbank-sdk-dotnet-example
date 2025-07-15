@@ -1,0 +1,53 @@
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Webpay Plus Diferido - Capturar transacción diferida</h1>
+<p class="mb-32">
+En este paso debemos capturar la transacción para realmente capturar el dinero que había sido previamente reservado al hacer la transacción.
+</p>
+
+<h2 id="request">Paso 1 - Petición:</h2>
+<p class="mb-32">
+    Para capturar una transacción necesitaremos el Token, Orden de compra, Código de autorización y monto a capturar. Se hace de la siguiente manera:
+</p>
+
+<pre>
+<code class="language-csharp mb-32">
+var response = tx.Capture(token, buyOrder, authorizationCode, captureAmount);
+</code>
+</pre>
+
+<h2 id="request">Paso 2 - Respuesta:</h2>
+<p class="mb-32">
+    Transbank contestará con lo siguiente. Debes guardar esta información, lo único que debes validar es que response_code sea igual a cero.
+</p>
+<pre>
+    <code class="language-json mb-32">
+        @Html.Raw(ViewBag.response)
+    </code>
+</pre>
+
+<h2 id="response">Otras utilidades</h2>
+<p class="mb-32">
+    Luego de capturada la transacción puedes Reembolsar (reversar o anular) el pago dependiendo de ciertas condiciones comerciales (Reversa en las primeras 3 horas de la captura, anulación posterior a eso). También puedes consultar el estado de la transacción hasta 7 días después de realizada.
+</p>
+
+<form action="/webpay-plus-deferred/refund" method="GET">
+    <div class="tbk-card mb-32">
+        <div class="tbk-capture-section">
+            <div class="input-container">
+                <label for="amount" class="tbk-label">Monto a reembolsar:</label>
+                <input type="number" name="amount" class="tbk-input-text" value="@ViewBag.amount"/>
+                <input type="hidden" name="token" class="tbk-input-text" value="@ViewBag.token"/>
+            </div>
+            <div class="tbk-button-container">
+                <button class="tbk-button primary">REEMBOLSAR</button>
+                <a class="tbk-button primary" href="/webpay-plus-deferred/status?token=@ViewBag.token">
+                    CONSULTAR ESTADO
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
