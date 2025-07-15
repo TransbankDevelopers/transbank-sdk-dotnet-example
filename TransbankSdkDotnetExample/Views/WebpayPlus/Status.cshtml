@@ -1,0 +1,34 @@
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Webpay Plus - Consultar estado de transacción</h1>
+<p class="mb-32">
+    Puedes solicitar el estado de una transacción hasta 7 días después de su realización. No hay
+    límite de solicitudes de este tipo durante ese período. Sin embargo, una vez pasados los 7 días, ya no podrás revisar
+    su estado.
+</p>
+
+<h2 id="request">Paso 1 - Petición:</h2>
+<p class="mb-32">
+    Para realizar la consulta, necesitas el token de la transacción de la cual deseas obtener el estado. Utiliza
+    este token para realizar una llamada al SDK.
+</p>
+
+<pre>
+  <code class="language-csharp mb-32">
+  var response = tx.Status(token);
+  </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+  Una vez que hayas creado la transacción, aquí encontrarás los datos de respuesta generados por el proceso.
+</p>
+
+<pre>
+    <code class="language-json mb-32">
+        @Html.Raw(ViewBag.response)
+    </code>
+</pre>
