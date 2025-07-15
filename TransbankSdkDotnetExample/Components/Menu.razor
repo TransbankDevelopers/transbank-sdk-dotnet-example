@@ -26,6 +26,20 @@
                         </li>
                     </ul>
                 </li>
+                <li style="margin-bottom:20px;">
+                    <button class="sidebar-collapsible-title" data-collapsible="webpay-plus-deferred" @onclick="() =>CollapseSidebar2(webpayPlusDeferredButton)" @ref="webpayPlusDeferredButton">
+                        <span class="general-text">Webpay Plus Diferido</span>
+                        <img src="t-arrow.svg" class="arrow" alt="t-arrow" width="24"
+                            height="24" />
+                    </button>
+                    <ul class="collapsible-content" id="collapse-webpay-plus-deferred">
+                        <li class="collapsible-items">
+                            <a href="/webpay-plus-deferred/create" class="tbk-sidebar-item">
+                                Flujo Completo
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <hr class="sidebar-divider" />
         </div>
@@ -35,6 +49,7 @@
 @code {
 
     private ElementReference webpayPlusButton;
+    private ElementReference webpayPlusDeferredButton;
     private async Task ToggleSidebar()
     {
         await JS.InvokeVoidAsync("toggleSidebar");
@@ -43,6 +58,11 @@
     private async Task CollapseSidebar()
     {
         await JS.InvokeVoidAsync("collapseSidebar", webpayPlusButton);
+    }
+
+    private async Task CollapseSidebar2(ElementReference element)
+    {
+        await JS.InvokeVoidAsync("collapseSidebar", webpayPlusDeferredButton);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
