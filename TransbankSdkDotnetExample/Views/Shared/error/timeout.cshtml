@@ -1,0 +1,23 @@
+@{
+    {
+      Layout = "~/Views/Shared/_Layout.cshtml";
+    };
+}
+
+<h1 id="error">@ViewBag.productName - Time out</h1>
+
+<p class="mb-32">
+    Cuando una transacción expira debido a un timeout, es crucial gestionar este escenario de manera adecuada para
+    garantizar la transparencia y la experiencia del usuario, para la prueba en integración son de 10 minutos.
+</p>
+
+<h2>Datos recibidos:</h2>
+<p class="m-32">
+    Después de 10 minutos en el que no se haya recibido ninguna acción o interacción del usuario, recibirás un
+    GET con la siguiente información:
+</p>
+<pre class="mb-32">
+  <code class="language-json">
+    @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.requestData, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }))
+  </code>
+</pre>
