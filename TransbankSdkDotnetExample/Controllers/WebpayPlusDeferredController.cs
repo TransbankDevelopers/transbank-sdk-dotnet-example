@@ -44,7 +44,7 @@ public class WebpayPlusDeferredController : Controller
         {
             ViewBag.requestData = Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
             ViewBag.productName = "Webpay Plus Diferido"; 
-            ViewBag.createUrl = Url.Action("Create", "WebpayPlus");
+            ViewBag.createUrl = Url.Action("Create", "WebpayPlusDeferred");
             if (!string.IsNullOrEmpty(TBK_TOKEN) && !string.IsNullOrEmpty(token_ws))
             {
                 return View("~/Views/Shared/error/form_error.cshtml");
