@@ -38,16 +38,46 @@ public class WebpayPlusDeferredController : Controller
     }
 
     [HttpGet("commit")]
-    public IActionResult Commit(string token_ws)
+    public IActionResult Commit(string? TBK_TOKEN, string? token_ws)
     {
-        CommitResponse commitResponse = _transaction.Commit(token_ws);
-        ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(commitResponse!), new JsonSerializerOptions { WriteIndented = true });
-        ViewBag.token = token_ws;
-        ViewBag.buyOrder = commitResponse.BuyOrder;
-        ViewBag.authorizationCode = commitResponse.AuthorizationCode;
-        ViewBag.amount = (int)(commitResponse.Amount ?? 0);
-        ViewBag.url = $"{Request.Scheme}://{Request.Host}{Request.Path}{Request.QueryString}";
-        return View();
+        try
+        {
+            ViewBag.requestData = Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+            ViewBag.productName = "Webpay Plus Diferido"; 
+            ViewBag.createUrl = Url.Action("Create", "WebpayPlusDeferred");
+            if (!string.IsNullOrEmpty(TBK_TOKEN) && !string.IsNullOrEmpty(token_ws))
+            {
+                return View("~/Views/Shared/error/form_error.cshtml");
+            }
+            else if (!string.IsNullOrEmpty(TBK_TOKEN))
+            {
+                // Pago abortado
+                var resp = _transaction.Status(TBK_TOKEN);
+                ViewBag.respondData = ResponseUtils.ToMap(resp);
+                return View("~/Views/Shared/error/aborted.cshtml");
+            }
+            else if (!string.IsNullOrEmpty(token_ws))
+            {
+                // Flujo normal: commit
+                CommitResponse commitResponse = _transaction.Commit(token_ws);
+                ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(commitResponse!), new JsonSerializerOptions { WriteIndented = true });
+                ViewBag.token = token_ws;
+                ViewBag.buyOrder = commitResponse.BuyOrder;
+                ViewBag.authorizationCode = commitResponse.AuthorizationCode;
+                ViewBag.amount = (int)(commitResponse.Amount ?? 0);
+                ViewBag.url = $"{Request.Scheme}://{Request.Host}{Request.Path}{Request.QueryString}";
+                return View();
+            }
+            else
+            {
+                // Timeout o caso no manejado
+                return View("~/Views/Shared/error/timeout.cshtml");
+            }
+        }
+        catch (Exception e)
+        {
+            return View("~/Views/Shared/error/errorPage.cshtml", model: e.Message);
+        }
     }
 
     [HttpGet("status")]
