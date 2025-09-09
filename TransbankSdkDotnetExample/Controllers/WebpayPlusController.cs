@@ -38,13 +38,17 @@ public class WebpayPlusController : Controller
     }
 
     [HttpGet("commit")]
+    [HttpPost("commit")]
     public IActionResult Commit(string? TBK_TOKEN, string? token_ws)
     {
         try
-        {   
-            ViewBag.requestData = Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
-            ViewBag.productName = "Webpay Plus"; 
+        {
+            ViewBag.requestData = Request.HasFormContentType 
+                ? Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString())
+                : Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+            ViewBag.productName = "Webpay Plus";
             ViewBag.createUrl = Url.Action("Create", "WebpayPlus");
+            // error Formulario
             if (!string.IsNullOrEmpty(TBK_TOKEN) && !string.IsNullOrEmpty(token_ws))
             {
                 return View("~/Views/Shared/error/form_error.cshtml");
