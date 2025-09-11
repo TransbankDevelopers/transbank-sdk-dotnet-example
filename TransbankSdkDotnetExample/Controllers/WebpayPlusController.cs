@@ -48,7 +48,6 @@ public class WebpayPlusController : Controller
                 : Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
             ViewBag.productName = "Webpay Plus";
             ViewBag.createUrl = Url.Action("Create", "WebpayPlus");
-            // error Formulario
             if (!string.IsNullOrEmpty(TBK_TOKEN) && !string.IsNullOrEmpty(token_ws))
             {
                 return View("~/Views/Shared/error/form_error.cshtml");
