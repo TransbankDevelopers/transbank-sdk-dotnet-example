@@ -175,6 +175,11 @@ button {
   border: none;
 }
 
+.title:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 h1.title {
   color: var(--primary-text);
   text-align: center;
