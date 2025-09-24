@@ -38,12 +38,15 @@ public class WebpayPlusDeferredController : Controller
     }
 
     [HttpGet("commit")]
+    [HttpPost("commit")]
     public IActionResult Commit(string? TBK_TOKEN, string? token_ws)
     {
         try
         {
-            ViewBag.requestData = Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
-            ViewBag.productName = "Webpay Plus Diferido"; 
+            ViewBag.requestData = Request.HasFormContentType
+                ? Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString())
+                : Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+            ViewBag.productName = "Webpay Plus Diferido";
             ViewBag.createUrl = Url.Action("Create", "WebpayPlusDeferred");
             if (!string.IsNullOrEmpty(TBK_TOKEN) && !string.IsNullOrEmpty(token_ws))
             {
