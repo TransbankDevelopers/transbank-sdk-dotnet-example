@@ -62,7 +62,7 @@ public class OneclickMallController : Controller
             var resp = _inscription.Finish(token);
             HttpContext.Session.Set("tbk_user", System.Text.Encoding.UTF8.GetBytes(resp.ToString()));
 
-            ViewBag.requestData = new Dictionary<string, string>
+            ViewBag.RequestData = new Dictionary<string, string>
                 {
                     { "username", HttpContext.Session.GetString("username") ?? "" },
                     { "tbk_user", resp.TbkUser  ?? "" }
@@ -171,7 +171,7 @@ public class OneclickMallController : Controller
             var resp = _transaction.Refund(buyOrder, childCommerceCode, childBuyOrder, amount);
             ViewBag.ResponseJson = JsonSerializer.Serialize(ResponseUtils.ToMap(resp!), new JsonSerializerOptions { WriteIndented = true });
             
-            ViewBag.buyOrder = buyOrder;
+            ViewBag.BuyOrder = buyOrder;
            
             
             return View();
