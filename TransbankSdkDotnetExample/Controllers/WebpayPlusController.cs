@@ -10,6 +10,7 @@ namespace TransbankSdkDotnetExample.Controllers;
 public class WebpayPlusController : Controller
 {
     private readonly Transaction _transaction;
+    private const string ErrorPagePath = "~/Views/Shared/error/errorPage.cshtml";
 
     public WebpayPlusController()
     {
@@ -22,18 +23,25 @@ public class WebpayPlusController : Controller
     [HttpGet("create")]
     public IActionResult Create()
     {
+        
         string baseUrl = $"{Request.Scheme}://{Request.Host}";
         var buyOrder = $"O-{Random.Shared.Next(1, 100000)}";
         var sessionId = $"S-{Random.Shared.Next(1, 100000)}";
         var amount = Random.Shared.Next(1000, 200000);
         var returnUrl = $"{baseUrl}/webpay-plus/commit";
 
+        try 
+        {
         CreateResponse createResponse = _transaction.Create(buyOrder, sessionId, amount, returnUrl);
         ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(createResponse!), new JsonSerializerOptions { WriteIndented = true });
         ViewBag.token = createResponse.Token;
         ViewBag.url = createResponse.Url;
         ViewBag.baseUrl = baseUrl;
         ViewBag.requestData = JsonSerializer.Deserialize<Dictionary<string, object>>(createResponse.OriginalRequest) ?? new Dictionary<string, object>();
+            }
+        catch (Exception e){
+            return View(ErrorPagePath, model: e.Message);
+        }
         return View();
     }
 
@@ -79,24 +87,38 @@ public class WebpayPlusController : Controller
         }
         catch (Exception e)
         {
-            return View("~/Views/Shared/error/errorPage.cshtml", model: e.Message);
+            return View(ErrorPagePath, model: e.Message);
         }
     }
 
     [HttpGet("status")]
     public IActionResult Status(string token)
     {
-        StatusResponse statusResponse = _transaction.Status(token);
-        ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(statusResponse!), new JsonSerializerOptions { WriteIndented = true });
-        return View();
+        try
+        {
+            StatusResponse statusResponse = _transaction.Status(token);
+            ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(statusResponse!), new JsonSerializerOptions { WriteIndented = true });
+            return View();
+        }
+        catch (Exception e)
+        {
+            return View(ErrorPagePath, model: e.Message);
+        }
     }
 
     [HttpGet("refund")]
     public IActionResult Refund(string token, decimal amount)
     {
-        RefundResponse refundResponse = _transaction.Refund(token, amount);
-        ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(refundResponse!), new JsonSerializerOptions { WriteIndented = true });
-        ViewBag.token = token;
-        return View();
+        try
+        {
+            RefundResponse refundResponse = _transaction.Refund(token, amount);
+            ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(refundResponse!), new JsonSerializerOptions { WriteIndented = true });
+            ViewBag.token = token;
+            return View();
+        }
+        catch (Exception e)
+        {
+            return View(ErrorPagePath, model: e.Message);
+        }
     }
 }

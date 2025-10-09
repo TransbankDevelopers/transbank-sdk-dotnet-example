@@ -11,6 +11,8 @@ public class WebpayPlusDeferredController : Controller
 {
     private readonly Transaction _transaction;
 
+    private const string ErrorPagePath = "~/Views/Shared/error/errorPage.cshtml";
+
     public WebpayPlusDeferredController()
     {
         var commerceCode = Transbank.Common.IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED;
@@ -79,34 +81,55 @@ public class WebpayPlusDeferredController : Controller
         }
         catch (Exception e)
         {
-            return View("~/Views/Shared/error/errorPage.cshtml", model: e.Message);
+            return View(ErrorPagePath, model: e.Message);
         }
     }
 
     [HttpGet("status")]
     public IActionResult Status(string token)
     {
-        StatusResponse statusResponse = _transaction.Status(token);
-        ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(statusResponse!), new JsonSerializerOptions { WriteIndented = true });
-        return View();
+        try
+        {
+            StatusResponse statusResponse = _transaction.Status(token);
+            ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(statusResponse!), new JsonSerializerOptions { WriteIndented = true });
+            return View();
+        }
+        catch (Exception e)
+        {
+            return View(ErrorPagePath, model: e.Message);
+        }
     }
 
     [HttpGet("refund")]
     public IActionResult Refund(string token, decimal amount)
     {
-        RefundResponse refundResponse = _transaction.Refund(token, amount);
-        ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(refundResponse!), new JsonSerializerOptions { WriteIndented = true });
-        ViewBag.token = token;
-        return View();
+        try
+        {
+            RefundResponse refundResponse = _transaction.Refund(token, amount);
+            ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(refundResponse!), new JsonSerializerOptions { WriteIndented = true });
+            ViewBag.token = token;
+            return View();
+        }
+        catch (Exception e)
+        {
+            return View(ErrorPagePath, model: e.Message);
+        }
     }
 
     [HttpGet("capture")]
     public IActionResult Capture(string token, string buyOrder, string authorizationCode, decimal captureAmount)
     {
-        CaptureResponse commitResponse = _transaction.Capture(token, buyOrder, authorizationCode, captureAmount);
-        ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(commitResponse!), new JsonSerializerOptions { WriteIndented = true });
-        ViewBag.token = token;
-        ViewBag.amount = (int)(commitResponse.CapturedAmount ?? 0);
-        return View();
+        try
+        {
+            CaptureResponse commitResponse = _transaction.Capture(token, buyOrder, authorizationCode, captureAmount);
+            ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(commitResponse!), new JsonSerializerOptions { WriteIndented = true });
+            ViewBag.token = token;
+            ViewBag.amount = (int)(commitResponse.CapturedAmount ?? 0);
+            return View();
+        }
+        catch (Exception e)
+        {
+            return View(ErrorPagePath, model: e.Message);
+        }
     }
 }

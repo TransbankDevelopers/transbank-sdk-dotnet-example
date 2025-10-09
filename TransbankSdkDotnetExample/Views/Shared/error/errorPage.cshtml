@@ -5,11 +5,17 @@
 }
 
 <div class="error-container">
-  <h1>¡Ups! Algo salió mal</h1>
+  <h1>Se ha producido un error</h1>
   <p class="mb-32">
-    Lo sentimos, ha ocurrido un error inesperado. Si el problema persiste comunícate con nosotros en nuestro canal de
-    <a class="tbk-link" href="https://invitacion-slack.transbankdevelopers.cl/slack_community" target="_blank">slack</a>
+    Cuando se procesaba la operación, la API encontró un problema y devolvió un error.
   </p>
-
-  <a href="@Url.Action("Index", "Home")" class="tbk-button primary mb-32">Volver al inicio</a>
+  
+  <h2>¿Por qué no fue posible realizar la operación?</h2>
+  <p>Cuando ocurre un error en la operación con la API, el SDK lo captura automáticamente. A continuación, se muestra el detalle de la excepción, lo que te permitirá identificar y comprender el problema.</p>
+  
+  <pre class="mb-32">
+    <code class="language-json">@Model</code>
+  </pre>
 </div>
+
+
