@@ -37,7 +37,7 @@
 
 <pre>
   <code class="language-csharp">
-  var resp = _transaction.Refund(buy_order, child_commerce_code, child_buy_order, amount);
+  var resp = transaction.Refund(buyOrder, childCommerceCode, childBuyOrder, amount);
   </code>
 </pre>
 
@@ -57,6 +57,3 @@
    href="@Url.Action("Status", "OneclickMall", new { buy_order = ViewBag.BuyOrder })">
    CONSULTAR ESTADO
 </a>
-
-
-

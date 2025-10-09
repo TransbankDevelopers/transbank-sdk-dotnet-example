@@ -16,7 +16,7 @@
 
 <h2 id="request">Paso 1: Petición</h2>
 <p class="mb-32">
-    Ahora que contamos con el "username" y el "tbk_user" obtenidos durante la inscripción, estamos listos para
+    Ahora que contamos con el "username" y el "tbkUser" obtenidos durante la inscripción, estamos listos para
     autorizar transacciones en la tarjeta inscrita.
 </p>
 
@@ -29,20 +29,20 @@
     details.Add(new PaymentRequest(
         childCommerceCode2, buyOrderMallTwo, childCommerceAmount2, childCommerceInstallments2
     ));
-    var resp = tx.Authorize(username, tbk_user, buy_order, details);
+    var resp = transaction.Authorize(username, tbkUser, buyOrder, details);
   </code>
 </pre>
 
 <h2 id="response">Paso 2: Respuesta</h2>
 <p class="mb-32">
     Una vez que la transacción ha sido autorizada, Transbank proporcionará la siguiente información. 
-    Es fundamental conservar esta respuesta y verificar que el campo <b>response_code</b> tenga un valor de cero 
-    y que el campo <b>status</b> sea "AUTHORIZED".
+    Es fundamental conservar esta respuesta y verificar que el campo <b>ResponseCode</b> tenga un valor de cero 
+    y que el campo <b>Status</b> sea "AUTHORIZED".
 </p>
 
 <pre><code class="language-json mb-32">@Html.Raw(ViewBag.ResponseJson)</code></pre>
 
-<h2>listo!</h2>
+<h2>¡Listo!</h2>
 <p class="mb-32">
     Con la autorización exitosa, puedes mostrar al usuario una página de éxito de la transacción, proporcionándole la confirmación de que el proceso se ha completado con éxito.
 </p>
