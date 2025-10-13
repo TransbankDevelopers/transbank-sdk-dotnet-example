@@ -3,13 +3,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<nav class="breadcrumbs-container">
+<nav class="breadcrumbs-container mb-32">
   <div class="breadcrumbs-items"><a href="@Url.Action("Index", "Home")" >Inicio</a>  &gt;</div>
-  <div class="breadcrumbs-items"><a href="/oneclick-mall/start" >Webpay Oneclick</a> &gt; </div>
-  <div class="breadcrumbs-items"><span class="current-breadcrumb">Estado</span></div>
+  <div class="breadcrumbs-items"><a href="/oneclick-mall-diferido/start" >Webpay Oneclick Mall Diferido</a> &gt; </div>
+  <div class="breadcrumbs-items"><span class="current-breadcrumb">Consultar estado de transacción</span></div>
 </nav>
 
-<h1>Webpay Oneclick Mall - Consultar estado de transacción</h1>
+<h1>Webpay Oneclick Mall Diferido - Consultar estado de transacción</h1>
     <p class="mb-32">Puedes solicitar el estado de una transacción hasta 7 días después de su realización. No hay
         límite
         de solicitudes de este tipo durante ese período. Sin embargo, una vez pasados los 7 días, ya no podrás revisar
@@ -24,8 +24,7 @@
 
 <pre>
   <code class="language-csharp">
-  transaction = MallTransaction.buildForIntegration(commerceCode, apiKey);
-  var resp = transaction.Status(buy_order);
+  var resp = transaction.Status(buyOrder);
   </code>
 </pre>
 

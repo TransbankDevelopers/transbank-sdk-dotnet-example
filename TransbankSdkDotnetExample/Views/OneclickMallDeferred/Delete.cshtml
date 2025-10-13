@@ -1,0 +1,44 @@
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="breadcrumbs-container mb-32">
+  <div class="breadcrumbs-items"><a href="@Url.Action("Index", "Home")" >Inicio</a>  &gt;</div>
+  <div class="breadcrumbs-items"><a href="/oneclick-mall-diferido/start" >Webpay Oneclick Mall Diferido</a> &gt; </div>
+  <div class="breadcrumbs-items"><span class="current-breadcrumb">Borrar usuario</span></div>
+</nav>
+
+<h1>Webpay Oneclick Mall Diferido - Borrar usuario</h1>
+<p class="mb-32">
+    En este paso fundamental, procederemos a eliminar la inscripción del usuario y su medio de pago.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">
+    Para llevar a cabo la eliminación, necesitas el "username" (Nombre de Usuario) y el "tbkUser". Realiza la
+    llamada a MallInscription utilizando el siguiente código:
+</p>
+
+<pre>
+  <code class="language-html mb-32">
+  var resp = inscription.Delete(tbkUser, username);
+  </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+    En caso de éxito, Transbank responderá con un status code 204 (No Content), y el SDK no retornará ningún valor. 
+    La eliminación de la inscripción se ha realizado de manera exitosa.
+</p>
+
+<p class="mb-32">
+    En el caso de que no se encuentre el "username" o el "tbkUser", Transbank responderá con un status code 404 (Not
+    Found), y el SDK lanzará una excepción del tipo TransbankError.
+</p>
+
+<p class="mb-32">
+    Este proceso garantiza una eliminación segura y eficiente de la inscripción del usuario y su medio de pago
+    asociado. ¡Gracias por confiar en Transbank para tus operaciones seguras! Si tienes alguna pregunta, estamos
+    aquí para ayudarte
+</p>

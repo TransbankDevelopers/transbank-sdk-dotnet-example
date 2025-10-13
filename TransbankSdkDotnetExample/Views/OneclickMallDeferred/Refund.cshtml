@@ -5,10 +5,10 @@
 
 <nav class="breadcrumbs-container">
   <div class="breadcrumbs-items"><a href="@Url.Action("Index", "Home")" >Inicio</a>  &gt;</div>
-  <div class="breadcrumbs-items"><a href="/oneclick-mall/start" >Webpay Oneclick</a> &gt; </div>
+  <div class="breadcrumbs-items"><a href="/oneclick-mall-diferido/start" >Webpay Oneclick Mall Diferido</a> &gt; </div>
   <div class="breadcrumbs-items"><span class="current-breadcrumb">Reembolsar</span></div>
 </nav>
-<h1>Webpay Oneclick Mall - Reembolsar</h1>
+<h1>Webpay Oneclick Mall Diferido - Reembolsar</h1>
 
 <p class="mb-32">
   En esta etapa, tienes la opción de solicitar el reembolso del monto al titular de la tarjeta. Dependiendo del monto y el tiempo transcurrido desde la autorización, este proceso podría resultar en una Reversa o Anulación, dependiendo de ciertas condiciones (Reversa en las primeras 3 horas de la autorización, anulación posterior a eso), o una Anulación parcial si el monto es menor al total. Las anulaciones parciales para tarjetas débito y prepago no están soportadas.
@@ -53,7 +53,7 @@
   </code>
 </pre>
 
-<a class="tbk-button primary mb-32"
-   href="@Url.Action("Status", "OneclickMall", new { buy_order = ViewBag.BuyOrder })">
+<a href="@Url.Action("Status", "OneclickMallDeferred", new { buy_order = ViewBag.BuyOrder })" 
+   class="tbk-button primary mb-32">
    CONSULTAR ESTADO
 </a>

@@ -3,13 +3,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<nav class="breadcrumbs-container">
+<nav class="breadcrumbs-container mb-32">
   <div class="breadcrumbs-items"><a href="@Url.Action("Index", "Home")" >Inicio</a>  &gt;</div>
-  <div class="breadcrumbs-items"><a href="/oneclick-mall/start" >Webpay Oneclick</a> &gt; </div>
+  <div class="breadcrumbs-items"><a href="/oneclick-mall-diferido/start" >Webpay Oneclick Mall Diferido</a> &gt; </div>
   <div class="breadcrumbs-items"><span class="current-breadcrumb">Finalizar inscripción</span></div>
 </nav>
 
-<h1>Webpay Oneclick Mall - Finalizar inscripción</h1>
+<h1>Webpay Oneclick Mall Diferido - Finalizar inscripción</h1>
 <p class="mb-32">
   En esta fase, completaremos el proceso de inscripción, permitiéndonos posteriormente realizar cargos a la
   tarjeta que el Tarjetahabiente haya inscrito.
@@ -21,7 +21,7 @@
 </p>
 
 <pre>
-  <code class="language-json mb-32">
+  <code class="language-csharp mb-32">
   {
     "TBK_TOKEN": "@ViewBag.Token"
   }
@@ -73,7 +73,7 @@
   acaba de inscribir.
 </p>
 
-<form action="@Url.Action("Authorize", "OneclickMall")" method="get">
+<form action="@Url.Action("Authorize", "OneclickMallDeferred")" method="get">
     <input type="hidden" name="username" value="@ViewBag.Username" />
     <input type="hidden" name="tbk_user" value="@ViewBag.TbkUser" />
     <input type="hidden" name="child_commerce_code1" value="@ViewBag.ChildCommerceCode1" />
@@ -110,5 +110,5 @@
     </div>
 </form>
 
-<a href="@Url.Action("Delete", "OneclickMall", new { tbk_user = ViewBag.TbkUser, username = ViewBag.Username })"
+<a href="@Url.Action("Delete", "OneclickMallDeferred", new { tbk_user = ViewBag.TbkUser, username = ViewBag.Username })"
    class="tbk-button primary mt-16 mb-32">BORRAR USUARIO</a>

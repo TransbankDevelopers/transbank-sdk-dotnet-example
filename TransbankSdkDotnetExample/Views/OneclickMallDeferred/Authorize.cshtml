@@ -2,14 +2,13 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<nav class="breadcrumbs-container">
+<nav class="breadcrumbs-container mb-32">
   <div class="breadcrumbs-items"><a href="@Url.Action("Index", "Home")" >Inicio</a>  &gt;</div>
-  <div class="breadcrumbs-items"><a href="/oneclick-mall/start" >Webpay Oneclick</a> &gt; </div>
+  <div class="breadcrumbs-items"><a href="/oneclick-mall-diferido/start" >Webpay Oneclick Mall Diferido</a> &gt; </div>
   <div class="breadcrumbs-items"><span class="current-breadcrumb">Autorizar pago</span></div>
 </nav>
 
-<h1>Webpay Oneclick Mall - Autorizar pago</h1>
+<h1>Webpay Oneclick Mall Diferido - Autorizar pago</h1>
 <p class="mb-32">
     En este primer paso, procederemos a autorizar una transacción en la tarjeta que ha sido previamente inscrita.
 </p>
@@ -42,50 +41,44 @@
 
 <pre><code class="language-json mb-32">@Html.Raw(ViewBag.ResponseJson)</code></pre>
 
-<h2>¡Listo!</h2>
+<h2>¡Casi listo!</h2>
 <p class="mb-32">
-    Con la autorización exitosa, puedes mostrar al usuario una página de éxito de la transacción, proporcionándole la confirmación de que el proceso se ha completado con éxito.
+    Ya puedes mostrar al usuario una página de éxito de la transacción. 
+    Debes tener en cuenta que la transacción aún no ha sido capturada, solo se ha retenido el saldo en la tarjeta del Tarjetahabiente.
 </p>
-
-<ul class="list">
-    <li>
-        <span class="fw-700">Reembolsar:</span> Puedes reversar o anular el pago según ciertas condiciones comerciales.
-    </li>
-    <li>
-        <span class="fw-700">Consultar Estado:</span> Hasta 7 días después de realizada la transacción, podrás consultar el estado de la transacción.
-    </li>
-</ul>
 
 @foreach (var detail in ViewBag.ResponseData.Details)
 {
-    <form asp-action="Refund" asp-controller="OneclickMall" method="get">
+    <form asp-action="Capture" asp-controller="OneclickMallDeferred" method="get">
+        <input type="hidden" name="buy_order" value="@ViewBag.ResponseData.BuyOrder" />
+
         <div class="tbk-card">
             <div class="card-multi-field">
                 <div class="input-container">
-                    <label class="tbk-label" for="buy_order">Orden compra:</label>
-                    <input class="tbk-input-text" type="text" name="buy_order" value="@ViewBag.ResponseData.BuyOrder" />
-                </div>
-                <div class="input-container">
-                    <label class="tbk-label" for="child_commerce_code">Código de comercio tienda:</label>
+                    <label class="tbk-label" for="child_commerce_code">Código de comercio (tienda hija):</label>
                     <input class="tbk-input-text" type="text" name="child_commerce_code" value="@detail.CommerceCode" />
                 </div>
                 <div class="input-container">
-                    <label class="tbk-label" for="child_buy_order">Orden de compra tienda:</label>
+                    <label class="tbk-label" for="child_buy_order">Orden de compra (tienda hija):</label>
                     <input class="tbk-input-text" type="text" name="child_buy_order" value="@detail.BuyOrder" />
                 </div>
                 <div class="input-container">
-                    <label class="tbk-label" for="amount">Monto a reembolsar:</label>
+                    <label class="tbk-label" for="authorization_code">Código de autorización (tienda hija):</label>
+                    <input class="tbk-input-text" type="text" name="authorization_code" value="@detail.AuthorizationCode" />
+                </div>
+                <div class="input-container">
+                    <label class="tbk-label" for="amount">Monto a capturar (tienda hija):</label>
                     <input class="tbk-input-text" type="text" name="amount" value="@detail.Amount" />
                 </div>
             </div>
             <div class="tbk-card-footer">
-                <button type="submit" class="tbk-button primary">REEMBOLSAR</button>
+                <button type="submit" class="tbk-button primary">CAPTURAR</button>
             </div>
         </div>
     </form>
 }
 
 <a class="tbk-button primary mb-32"
-   href="@Url.Action("Status", "OneclickMall", new { buy_order = ViewBag.ResponseData.BuyOrder })">
+   href="@Url.Action("Status", "OneclickMallDeferred", new { buy_order = ViewBag.ResponseData.BuyOrder })">
    CONSULTAR ESTADO
 </a>
