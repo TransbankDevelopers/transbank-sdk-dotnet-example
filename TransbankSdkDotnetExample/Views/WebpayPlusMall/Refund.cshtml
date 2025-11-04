@@ -1,0 +1,69 @@
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a href="/webpay-mall/create">Webpay Mall</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a class="current-breadcrumb" href="#">Reembolsar</a>
+    </div>
+</div>
+
+<h1>Webpay Plus - Reembolsar</h1>
+<p class="mb-32">
+  En esta etapa, tienes la opción de solicitar el reembolso del monto al titular de la tarjeta. 
+  Dependiendo del monto y el tiempo transcurrido desde la transacción, este proceso podría resultar en una Reversa o Anulación, 
+  dependiendo de ciertas condiciones (Reversa en las primeras 3 horas de la autorización, anulación posterior a eso), 
+  o una Anulación parcial si el monto es menor al total. Las anulaciones parciales para tarjetas débito y prepago no están soportadas.
+</p>
+
+<h2 id="request">Paso 1 - Petición:</h2>
+<p class="mb-32">
+  Para llevar a cabo el reembolso, necesitas proporcionar el token de la transacción y el monto que deseas reversar. 
+  Si anulas el monto total, podría ser una Reversa o Anulación, dependiendo de ciertas condiciones 
+  (Reversa en las primeras 3 horas de la autorización, anulación posterior a eso), o una Anulación Parcial si el monto es menor al total.
+</p>
+
+<p class="mb-16">
+    Algunas consideraciones a tener en cuenta:
+</p>
+<ul class="bullet-list mb-32">
+  <li>No es posible realizar Anulaciones Parciales en pagos con cuotas.</li>
+</ul>
+
+<p class="mb-32">
+  En
+  <a href="https://www.transbankdevelopers.cl/producto/webpay#anulaciones-y-reversas" target="_blank" class="tbk-link">este link</a>
+  podrás ver mayor información sobre las condiciones y casos para anular o reversar transacciones.
+</p>
+
+<pre>
+  <code class="language-csharp mb-32">
+  var _transaction = MallTransaction.buildForIntegration(commerceCode, apiKey);
+  var response = _transaction.Refund(token, amount);
+  </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+  Transbank responderá con el resultado del proceso de reembolso, indicando si se ha realizado una
+  Reversa, Anulación o Anulación Parcial.
+</p>
+
+<pre>
+    <code class="language-json mb-32">
+        @Html.Raw(ViewBag.ResponseJson)
+    </code>
+</pre>
+
+<a asp-action="status" asp-controller="WebpayPlusMall" asp-route-token="@ViewBag.Token" class="tbk-button primary mb-32">
+    CONSULTAR ESTADO
+</a>
