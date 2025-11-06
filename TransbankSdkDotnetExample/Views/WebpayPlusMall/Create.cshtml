@@ -64,8 +64,8 @@
 
 <pre>
   <code class="language-html mb-32">
-&lt;form action="@ViewBag.Response.Token" method="POST"&gt;
-  &lt;input type="hidden" name="token_ws" value="token_ws recibido" /&gt;
+&lt;form action="@ViewBag.Response.Url" method="POST"&gt;
+  &lt;input type="hidden" name="token_ws" value="@ViewBag.Response.Token" /&gt;
   &lt;input type="submit" value="Pagar" /&gt;
 &lt;/form&gt;
   </code>
