@@ -9,7 +9,7 @@
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
-        <a href="/webpay-mall/create">Webpay Mall</a>
+        <a href="/webpay-mall/create">Webpay Mall Diferido</a>
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<h1>Webpay Mall - Confirmar transacción</h1>
+<h1>Webpay Mall Diferido - Confirmar transacción</h1>
 
 <p class="mb-32">
   En este paso es importante confirmar la transacción para notificar a Transbank que hemos recibido exitosamente los detalles de la transacción.
@@ -60,37 +60,34 @@
     </code>
 </pre>
 
-<h2>¡Listo!</h2>
-<p class="mb-32">
-  Con la confirmación exitosa, ya puedes mostrar al usuario una página de éxito de la transacción, proporcionándole la tranquilidad de que el proceso ha sido completado con éxito.
-</p>
-
+<h2>¡Transaccion Confirmada!</h2>
 <p class="mb-16" id="operations">
-  Después de confirmar la transacción, podrás realizar otras operaciones útiles:
+Ahora que se ha confirmado la transacción, puedes capturar el monto previamente autorizado. El monto a capturar puede ser igual o menor al monto autorizado. La captura debe efectuarse dentro de un plazo máximo de 7 días calendario.
 </p>
 <ul class="bullet-list mb-32">
-  <li><span class="fw-700">Reembolsar:</span> Puedes reversar o anular el pago según ciertas condiciones comerciales.</li>
-  <li><span class="fw-700">Consultar Estado:</span> Hasta 7 días después de la transacción, podrás consultar el estado de la transacción.</li>
+  <li><span class="fw-700">Capturar:</span> Captura un monto igual o menor al previamente autorizado.</li>
+  <li><span class="fw-700">Consultar Estado:</span> Hasta 7 días después de realizada la transacción, podrás consultar el estado de la transacción.</li>
 </ul>
 
 @foreach (var detail in ViewBag.Response.Details)
 {
-    <form asp-action="refund" asp-controller="WebpayPlusMall" method="get">
+    <form asp-action="capture" asp-controller="WebpayPlusMallDeferred" method="get">
         <div class="tbk-card">
             <div class="input-container">
-                <label for="amount" class="tbk-label">Monto a reembolsar:</label>
+                <label for="amount" class="tbk-label">Monto a capturar:</label>
                 <input type="text" name="amount" class="tbk-input-text" value="@detail.Amount" />
                 <input type="hidden" name="childCommerceCode" value="@detail.CommerceCode" />
+                <input type="hidden" name="authorizationCode" value="@detail.AuthorizationCode" />
                 <input type="hidden" name="buyOrder" value="@detail.BuyOrder" />
                 <input type="hidden" name="token" value="@ViewBag.Token" />
             </div>
             <div class="tbk-card-footer">
-                <button class="tbk-button primary">REEMBOLSAR</button>
+                <button class="tbk-button primary">CAPTURAR</button>
             </div>
         </div>
     </form>
 }
 
-<a asp-action="status" asp-controller="WebpayPlusMall" asp-route-token="@ViewBag.Token" class="tbk-button primary mb-32">
+<a asp-action="status" asp-controller="WebpayPlusMallDeferred" asp-route-token="@ViewBag.Token" class="tbk-button primary mb-32">
     CONSULTAR ESTADO
 </a>

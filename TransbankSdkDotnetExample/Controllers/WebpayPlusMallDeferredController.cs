@@ -7,15 +7,15 @@ using TransbankSdkDotnetExample.Utils;
 
 namespace TransbankSdkDotnetExample.Controllers;
 
-[Route("webpay-mall")]
-public class WebpayPlusMallController : Controller
+[Route("webpay-mall-diferido")]
+public class WebpayPlusMallDeferredController : Controller
 {
     private readonly MallTransaction _transaction;
     private const string ErrorPagePath = "~/Views/Shared/error/errorPage.cshtml";
 
-    public WebpayPlusMallController()
+    public WebpayPlusMallDeferredController()
     {
-        var commerceCode = IntegrationCommerceCodes.WEBPAY_PLUS_MALL;
+        var commerceCode = IntegrationCommerceCodes.WEBPAY_PLUS_MALL_DEFERRED;
         var apiKey = IntegrationApiKeys.WEBPAY;
         _transaction = MallTransaction.buildForIntegration(commerceCode, apiKey);
     }
@@ -29,13 +29,13 @@ public class WebpayPlusMallController : Controller
         {
             var buyOrder = $"O-{Random.Shared.Next(1, 100000)}";
             var sessionId = $"S-{Random.Shared.Next(1, 100000)}";
-            var returnUrl = $"{baseUrl}/webpay-mall/commit";
+            var returnUrl = $"{baseUrl}/webpay-mall-diferido/commit";
 
-            var childCommerceCode1 = IntegrationCommerceCodes.WEBPAY_PLUS_MALL_CHILD1;
+            var childCommerceCode1 = IntegrationCommerceCodes.WEBPAY_PLUS_MALL_DEFERRED_CHILD1;
             var childBuyOrder1 = $"childBuyOrder-{Random.Shared.Next(1, 100000)}";
             decimal amount1 = 1000;
 
-            var childCommerceCode2 = IntegrationCommerceCodes.WEBPAY_PLUS_MALL_CHILD2;
+            var childCommerceCode2 = IntegrationCommerceCodes.WEBPAY_PLUS_MALL_DEFERRED_CHILD2;
             var childBuyOrder2 = $"childBuyOrder-{Random.Shared.Next(1, 100000)}";
             decimal amount2 = 1000;
             
@@ -122,6 +122,26 @@ public class WebpayPlusMallController : Controller
         }
     }
 
+    [HttpGet("capture")]
+    public IActionResult Capture(string token, string buyOrder, string childCommerceCode, string authorizationCode, decimal amount)
+    {
+        try
+        {
+            var response = _transaction.Capture(childCommerceCode, token, buyOrder, authorizationCode, amount);
+            ViewBag.Response = response;
+            ViewBag.ResponseJson = JsonSerializer.Serialize(ResponseUtils.ToMap(response!), new JsonSerializerOptions { WriteIndented = true });
+            ViewBag.Token = token;
+            ViewBag.BuyOrder = buyOrder;
+            ViewBag.ChildCommerceCode = childCommerceCode;
+            ViewBag.Amount = amount;
+            return View();
+        }
+        catch (Exception e)
+        {
+            return View(ErrorPagePath, model: e.Message);
+        }
+    }
+
     [HttpGet("refund")]
     public IActionResult Refund(string token, string buyOrder, string childCommerceCode, decimal amount)
     {
@@ -139,6 +159,4 @@ public class WebpayPlusMallController : Controller
         }
     }
     
-
-
 }
