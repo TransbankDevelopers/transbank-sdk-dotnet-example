@@ -1,0 +1,59 @@
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="breadcrumbs-container">
+  <div class="breadcrumbs-items"><a href="@Url.Action("Index", "Home")" >Inicio</a>  &gt;</div>
+  <div class="breadcrumbs-items"><a href="/oneclick-mall/start" >Webpay Oneclick</a> &gt; </div>
+  <div class="breadcrumbs-items"><span class="current-breadcrumb">Reembolsar</span></div>
+</nav>
+<h1>Webpay Oneclick Mall - Reembolsar</h1>
+
+<p class="mb-32">
+  En esta etapa, tienes la opción de solicitar el reembolso del monto al titular de la tarjeta. Dependiendo del monto y el tiempo transcurrido desde la autorización, este proceso podría resultar en una Reversa o Anulación, dependiendo de ciertas condiciones (Reversa en las primeras 3 horas de la autorización, anulación posterior a eso), o una Anulación parcial si el monto es menor al total. Las anulaciones parciales para tarjetas débito y prepago no están soportadas.
+</p>
+
+<h2 id="request">Paso 1 - Petición:</h2>
+<p class="mb-32">
+  Para llevar a cabo el reembolso, necesitas proporcionar la orden de compra de la transacción, código de comercio de la tienda, Orden de compra del detalle de la transacción y el Monto que deseas reversar. Si anulas el monto total, podría ser una Reversa o Anulación, dependiendo de ciertas condiciones (Reversa en las primeras 3 horas de la autorización, anulación posterior a eso), o una Anulación Parcial si el monto es menor al total.
+</p>
+
+<p class="mb-16">
+    Algunas consideraciones a tener en cuenta:
+</p>
+<ul class="bullet-list mb-32">
+  <li>No es posible realizar Anulaciones Parciales en pagos con cuotas.</li>
+</ul>
+
+<p class="mb-32">
+  En
+  <a href="https://www.transbankdevelopers.cl/producto/webpay#anulaciones-y-reversas"
+     class="tbk-link" target="_blank" rel="noopener noreferrer">
+    este link
+  </a>
+  podrás ver mayor información sobre las condiciones y casos para anular o reversar transacciones.
+</p>
+
+<pre>
+  <code class="language-csharp">
+  var resp = transaction.Refund(buyOrder, childCommerceCode, childBuyOrder, amount);
+  </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+  Transbank responderá con el resultado del proceso de reembolso, indicando si se ha realizado una
+  Reversa, Anulación o Anulación Parcial.
+</p>
+
+<pre class="mb-32">
+  <code class="language-json">
+    @Html.Raw(ViewBag.ResponseJson)
+  </code>
+</pre>
+
+<a class="tbk-button primary mb-32"
+   href="@Url.Action("Status", "OneclickMall", new { buy_order = ViewBag.BuyOrder })">
+   CONSULTAR ESTADO
+</a>

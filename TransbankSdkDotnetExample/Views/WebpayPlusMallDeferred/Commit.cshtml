@@ -1,0 +1,93 @@
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a href="/webpay-mall/create">Webpay Mall Diferido</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a class="current-breadcrumb" href="/webpay-mall/commit?token_ws=@ViewBag.Token">Confirmar transacción</a>
+    </div>
+</div>
+
+<h1>Webpay Mall Diferido - Confirmar transacción</h1>
+
+<p class="mb-32">
+  En este paso es importante confirmar la transacción para notificar a Transbank que hemos recibido exitosamente los detalles de la transacción.
+  <b>Es importante destacar que si la confirmación no se realiza, la transacción será caducada.</b>
+</p>
+
+<h2 id="data">Paso 1 - Datos recibidos:</h2>
+<ul class="mb-32">
+  <p class="m-32">
+    Después de completar el flujo en el formulario de pago, recibirás un GET con la siguiente información:
+  </p>
+</ul>
+
+<pre>
+  <code class="language-txt mb-32">
+  @ViewBag.Url
+  </code>
+</pre>
+
+<h2 id="request">Paso 2 - Petición:</h2>
+<p class="mb-32">
+  Utilizarás el token recibido para confirmar la transacción mediante el SDK.
+</p>
+
+<pre>
+  <code class="language-csharp mb-32">
+    var _transaction = MallTransaction.buildForIntegration(commerceCode, apiKey);
+    var response = _transaction.Commit(token_ws);
+  </code>
+</pre>
+
+<h2 id="response">Paso 3 - Respuesta:</h2>
+<p class="mb-32">
+  Una vez que la transacción ha sido confirmada, Transbank proporcionará la siguiente información. 
+  Es fundamental conservar esta respuesta y verificar que el campo "ResponseCode" tenga un valor de cero y que el campo "Status" sea "AUTHORIZED".
+</p>
+
+<pre>
+    <code class="language-json mb-32">@Html.Raw(ViewBag.ResponseJson)
+    </code>
+</pre>
+
+<h2>¡Transaccion Confirmada!</h2>
+<p class="mb-16" id="operations">
+Ahora que se ha confirmado la transacción, puedes capturar el monto previamente autorizado. El monto a capturar puede ser igual o menor al monto autorizado. La captura debe efectuarse dentro de un plazo máximo de 7 días calendario.
+</p>
+<ul class="bullet-list mb-32">
+  <li><span class="fw-700">Capturar:</span> Captura un monto igual o menor al previamente autorizado.</li>
+  <li><span class="fw-700">Consultar Estado:</span> Hasta 7 días después de realizada la transacción, podrás consultar el estado de la transacción.</li>
+</ul>
+
+@foreach (var detail in ViewBag.Response.Details)
+{
+    <form asp-action="capture" asp-controller="WebpayPlusMallDeferred" method="get">
+        <div class="tbk-card">
+            <div class="input-container">
+                <label for="amount" class="tbk-label">Monto a capturar:</label>
+                <input type="text" name="amount" class="tbk-input-text" value="@detail.Amount" />
+                <input type="hidden" name="childCommerceCode" value="@detail.CommerceCode" />
+                <input type="hidden" name="authorizationCode" value="@detail.AuthorizationCode" />
+                <input type="hidden" name="buyOrder" value="@detail.BuyOrder" />
+                <input type="hidden" name="token" value="@ViewBag.Token" />
+            </div>
+            <div class="tbk-card-footer">
+                <button class="tbk-button primary">CAPTURAR</button>
+            </div>
+        </div>
+    </form>
+}
+
+<a asp-action="status" asp-controller="WebpayPlusMallDeferred" asp-route-token="@ViewBag.Token" class="tbk-button primary mb-32">
+    CONSULTAR ESTADO
+</a>

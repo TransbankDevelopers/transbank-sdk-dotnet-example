@@ -1,0 +1,62 @@
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="breadcrumbs-container mb-32">
+  <div class="breadcrumbs-items"><a href="@Url.Action("Index", "Home")" >Inicio</a>  &gt;</div>
+  <div class="breadcrumbs-items"><a href="/oneclick-mall-diferido/start" >Webpay Oneclick Mall Diferido</a> &gt; </div>
+  <div class="breadcrumbs-items"><span class="current-breadcrumb">Capturar pago</span></div>
+</nav>
+
+<h1>Webpay Oneclick Mall Diferido - Capturar transacción diferida</h1>
+<p class="mb-32">
+    En este paso debemos capturar la transacción para realmente capturar el dinero que había sido previamente
+    reservado al hacer la transacción.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">
+    Para capturar una transacción necesitaremos el código de comercio de la tienda hija y Orden de compra de la tienda hija, 
+    Código de autorización y monto a capturar. Se hace de la siguiente manera.
+</p>
+
+<pre>
+  <code class="language-csharp">
+  var response = transaction.Capture(childCommerceCode, childBuyOrder, authorizationCode, amount);
+  </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+    Una vez creada la transacción, recibirás los siguientes datos de respuesta:
+</p>
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.ResponseJson)</code></pre>
+
+<h2 id="operations">Otras utilidades</h2>
+<p class="mb-32">
+    Luego de capturada la transacción puedes Reembolsar (reversar o anular) el pago dependiendo 
+    de ciertas condiciones comerciales (Reversa en las primeras 3 horas de la captura, anulación posterior a eso). 
+    También puedes consultar el estado de la transacción hasta 7 días después de realizada.
+</p>
+
+<form asp-controller="OneclickMallDeferred" asp-action="Refund" method="get">
+    <input type="hidden" name="buy_order" value="@ViewBag.BuyOrder" />
+    <input type="hidden" name="child_buy_order" value="@ViewBag.ChildBuyOrder" />
+    <input type="hidden" name="child_commerce_code" value="@ViewBag.ChildCommerceCode" />
+
+    <div class="tbk-refund-card mb-32">
+        <div class="input-container">
+            <label class="tbk-label" for="amount">Monto a reembolsar:</label>
+            <input type="text" id="amount" name="amount" class="tbk-input-text" value="@((int)ViewBag.RespondData.CapturedAmount)" />
+        </div>
+
+        <div class="tbk-refund-button-container">
+            <button type="submit" class="tbk-button primary">REEMBOLSAR</button>
+            <a href="@Url.Action("Status", "OneclickMallDeferred", new { buy_order = ViewBag.BuyOrder })" class="tbk-button primary">
+                CONSULTAR ESTADO
+            </a>
+        </div>
+    </div>
+</form>

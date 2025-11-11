@@ -1,0 +1,111 @@
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a class="current-breadcrumb" href="#">Webpay Mall</a>
+    </div>
+</div>
+
+<h1>Webpay Mall - Creación de transacción Mall</h1>
+<p class="mb-32">
+  En esta etapa, se procederá a la creación de una transacción con el fin de obtener un identificador único. Esto nos permitirá redirigir al Tarjetahabiente hacia el formulario de pago en el siguiente paso.
+</p>
+
+<p class="mb-32">
+  Todas las transacciones en este proyecto de ejemplo son realizadas en ambiente de integración.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<ul class="mb-32">
+    <li>Comienza por importar la librería WebpayPlus en tu proyecto.</li>
+    <li>Luego, crea una transacción utilizando las funciones proporcionadas mediante el SDK.</li>
+</ul>
+
+<pre>
+  <code class="language-csharp mb-32">
+    var _transaction = MallTransaction.buildForIntegration(commerceCode, apiKey);
+
+    var details = new List<TransactionDetail>();
+    details.Add(new TransactionDetail(
+        amount1,
+        childCommerceCode1,
+        childBuyOrder1
+    ));
+    details.Add(new TransactionDetail(
+        amount2,
+        childCommerceCode2,
+        childBuyOrder2
+    ));
+
+    var response = _transaction.Create(buyOrder, sessionId, returnUrl, details);
+  </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+  Una vez que hayas creado la transacción, aquí encontrarás los datos de respuesta generados por el proceso:
+</p>
+
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.ResponseJson)</code></pre>
+
+<h2 id="form">Paso 3: Creación del formulario</h2>
+<p class="mb-32">
+  Utiliza estos datos de respuesta para construir el formulario de pago al Tarjetahabiente. Este formulario será la interfaz a través de la cual el usuario realizará su transacción.
+</p>
+
+
+<pre>
+  <code class="language-html mb-32">
+&lt;form action="@ViewBag.Response.Url" method="POST"&gt;
+  &lt;input type="hidden" name="token_ws" value="@ViewBag.Response.Token" /&gt;
+  &lt;input type="submit" value="Pagar" /&gt;
+&lt;/form&gt;
+  </code>
+</pre>
+
+
+<h2 id="example">Ejemplo</h2>
+<p class="mb-32">
+  Para llevar a cabo una transacción de compra en nuestro sistema, primero debemos crear la transacción. Utilizaremos
+  los siguientes datos para configurar la transacción:
+</p>
+
+<div class="mb-32">
+    <div class="tbk-table">
+    <div class="table-column tbk-head">Campo</div>
+    <div class="table-column tbk-head">Valor</div>
+    @foreach(var item in @ViewBag.RequestData)
+    {
+      <div class="table-column">@item.Key</div>
+      <div class="table-column">@item.Value</div>
+    }
+    </div>
+</div>
+
+<p class="mb-32">
+  Por último, con la respuesta del servicio que confirma la creación de la transacción, procedemos a crear el
+  formulario de pago. Para fines de este ejemplo, haremos visible el campo "token_ws", el cual es esencial para
+  completar el proceso de pago de manera exitosa.
+</p>
+<span>
+  Antes de continuar al formulario de Webpay, asegúrate de contar con los datos de las tarjetas de prueba que están en la
+  <a href="https://transbankdevelopers.cl/documentacion/como_empezar#tarjetas-de-prueba" class="tbk-link" target="_blank">documentación</a>
+</span>
+<form action="@ViewBag.Response.Url" method="POST">
+    <div class="tbk-card">
+        <span class="tbk-card-title">Formulario de redirección</span>
+        <label class="tbk-label" for="token_ws">Token</label>
+        <input type="text" name="token_ws" class="tbk-input-text" value="@ViewBag.Response.Token" />
+        <div class="tbk-card-footer">
+            <button class="tbk-button primary">PAGAR</button>
+        </div>
+    </div>
+</form>

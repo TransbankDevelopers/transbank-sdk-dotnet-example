@@ -1,0 +1,37 @@
+@model string
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="breadcrumbs-container mb-32">
+  <div class="breadcrumbs-items"><a href="@Url.Action("Index", "Home")" >Inicio</a>  &gt;</div>
+  <div class="breadcrumbs-items"><a href="/oneclick-mall-diferido/start" >Webpay Oneclick Mall Diferido</a> &gt; </div>
+  <div class="breadcrumbs-items"><span class="current-breadcrumb">Consultar estado de transacción</span></div>
+</nav>
+
+<h1>Webpay Oneclick Mall Diferido - Consultar estado de transacción</h1>
+    <p class="mb-32">Puedes solicitar el estado de una transacción hasta 7 días después de su realización. No hay
+        límite
+        de solicitudes de este tipo durante ese período. Sin embargo, una vez pasados los 7 días, ya no podrás revisar
+        su estado.
+    </p>
+
+    <h2 id="request">Paso 1 - Petición:</h2>
+    <p class="mb-32">
+        Para realizar la consulta, necesitarás el "buyOrder" de la transacción de interés. Utiliza este identificador
+        para efectuar una llamada a MallTransaction.
+    </p>
+
+<pre>
+  <code class="language-csharp">
+  var resp = transaction.Status(buyOrder);
+  </code>
+</pre>
+
+    <h2 id="response">Paso 2: Respuesta</h2>
+    <p class="mb-32">
+        Transbank responderá con la siguiente información. Asegúrate de guardar esta respuesta, y la única validación
+        necesaria es que el campo "ResponseCode" sea igual a cero.
+    </p>
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.ResponseJson)</code></pre>
