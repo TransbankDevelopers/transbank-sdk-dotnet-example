@@ -82,10 +82,40 @@
     <div class="tbk-table">
     <div class="table-column tbk-head">Campo</div>
     <div class="table-column tbk-head">Valor</div>
-    @foreach(var item in @ViewBag.RequestData)
+    @foreach(var item in ViewBag.RequestData)
     {
-      <div class="table-column">@item.Key</div>
-      <div class="table-column">@item.Value</div>
+
+        @if(item.Key == "details")
+        {
+            @if(item.Value is System.Text.Json.JsonElement jsonElement && jsonElement.ValueKind == System.Text.Json.JsonValueKind.Array)
+            {
+                int index = 0;
+                @foreach(var detail in jsonElement.EnumerateArray())
+                {
+                    <div class="table-column">details[@index]</div>
+                    <div class="table-column">
+                        @{
+                            var props = detail.EnumerateObject().ToList();
+                        }
+                        @for(int i = 0; i < props.Count; i++)
+                        {
+                            <span>@props[i].Name: @props[i].Value@(i < props.Count - 1 ? ", " : "")</span>
+                        }
+                    </div>
+                    index++;
+                }
+            }
+            else
+            {
+                <div class="table-column">@item.Key</div>
+                <div class="table-column">@item.Value</div>
+            }
+        }
+        else
+        {
+            <div class="table-column">@item.Key</div>
+            <div class="table-column">@item.Value</div>
+        }
     }
     </div>
 </div>
@@ -105,7 +135,7 @@
         <label class="tbk-label" for="token_ws">Token</label>
         <input type="text" name="token_ws" class="tbk-input-text" value="@ViewBag.Response.Token" />
         <div class="tbk-card-footer">
-            <button class="tbk-button primary">PAGAR</button>
+            <button type="submit" class="tbk-button primary">PAGAR</button>
         </div>
     </div>
 </form>
