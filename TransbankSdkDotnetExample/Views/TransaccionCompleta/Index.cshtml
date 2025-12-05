@@ -1,0 +1,74 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Transacción Completa";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <span class="current-breadcrumb">Transacción Completa</span>
+    </div>
+</div>
+
+<h1>Webpay Transacción Completa</h1>
+<p class="mb-32">
+    En esta primera etapa necesitas obtener los datos esenciales de la tarjeta. Utiliza el formulario para recolectar esta información de manera segura.
+</p>
+
+<div style="display: flex; justify-content: center; align-items: center;">
+    <div class="tbk-card" style="width: 100%;">
+        <span class="tbk-card-title">Formulario de pago</span>
+        
+        <div class="card-wrapper mb-32" style="display: flex; justify-content: center; width: 100%;"></div>
+
+        <form id="card-form" method="POST" action="/transaccion-completa/create">
+            
+            <div class="input-container mb-16">
+                <label for="number" class="tbk-label">Número de tarjeta:</label>
+                <input type="text" id="number" name="number" class="tbk-input-text" placeholder="0000 0000 0000 0000" required value="4051 8856 0044 6623">
+            </div>
+
+            <div class="input-container mb-16">
+                <label for="expiry" class="tbk-label">Vencimiento (MM/YY):</label>
+                <input type="text" id="expiry" name="expiry" class="tbk-input-text" placeholder="MM/YY" required value="11/23">
+            </div>
+
+            <div class="input-container mb-16">
+                <label for="cvc" class="tbk-label">CVC:</label>
+                <input type="password" id="cvc" name="cvc" class="tbk-input-text" placeholder="123" required value="123">
+            </div>
+
+            <div class="tbk-card-footer">
+                <button type="submit" class="tbk-button primary">Pagar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/card/2.5.0/card.min.js"></script>
+    <script>
+        var card = new Card({
+            form: '#card-form',
+            container: '.card-wrapper',
+            formSelectors: {
+                numberInput: 'input[name="number"]',
+                expiryInput: 'input[name="expiry"]',
+                cvcInput: 'input[name="cvc"]',
+                nameInput: 'input[name="name"]'
+            },
+            placeholders: {
+                number: '•••• •••• •••• ••••',
+                name: 'TEST USER',
+                expiry: '••/••',
+                cvc: '•••'
+            },
+            debug: false
+        });
+
+        document.querySelector('input[name="number"]').dispatchEvent(new Event('keyup'));
+    </script>
+}
