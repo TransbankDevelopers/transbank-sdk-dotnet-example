@@ -74,7 +74,6 @@
             debug: false
         });
 
-        // Asegurar que la tarjeta visual se renderice con los valores por defecto
         ['number','expiry','cvc'].forEach(function(name){
             var el = document.querySelector('input[name="'+name+'"]');
             if(el) el.dispatchEvent(new Event('keyup'));
