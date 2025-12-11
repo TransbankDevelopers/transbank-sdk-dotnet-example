@@ -64,6 +64,7 @@
                 cvcInput: 'input[name="cvc"]',
                 nameInput: 'input[name="name"]'
             },
+            width: 300,
             placeholders: {
                 number: '•••• •••• •••• ••••',
                 name: 'TEST USER',
@@ -73,6 +74,10 @@
             debug: false
         });
 
-        document.querySelector('input[name="number"]').dispatchEvent(new Event('keyup'));
+        // Asegurar que la tarjeta visual se renderice con los valores por defecto
+        ['number','expiry','cvc'].forEach(function(name){
+            var el = document.querySelector('input[name="'+name+'"]');
+            if(el) el.dispatchEvent(new Event('keyup'));
+        });
     </script>
 }
