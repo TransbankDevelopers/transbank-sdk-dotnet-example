@@ -9,42 +9,46 @@
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
-        <span class="current-breadcrumb">Transacción Completa</span>
+        <span class="current-breadcrumb">Webpay Transacción Completa</span>
     </div>
 </div>
 
-<h1>Webpay Transacción Completa</h1>
+<h1>Transacción Completa - Formulario</h1>
 <p class="mb-32">
-    En esta primera etapa necesitas obtener los datos esenciales de la tarjeta. Utiliza el formulario para recolectar esta información de manera segura.
+    En esta primera etapa necesitas obtener los datos esenciales de la tarjeta de crédito, débito o prepago del titular. Utiliza el formulario para recolectar esta información de manera segura.
 </p>
 
 <div style="display: flex; justify-content: center; align-items: center;">
-    <div class="tbk-card" style="width: 100%;">
-        <span class="tbk-card-title">Formulario de pago</span>
-        
-        <div class="card-wrapper mb-32" style="display: flex; justify-content: center; width: 100%;"></div>
-
+    <div class="tbk-card" style="width: 100%; max-width: none;">
         <form id="card-form" method="POST" action="/transaccion-completa/create">
-            
-            <div class="input-container mb-16">
-                <label for="number" class="tbk-label">Número de tarjeta:</label>
-                <input type="text" id="number" name="number" class="tbk-input-text" placeholder="0000 0000 0000 0000" required value="4051 8856 0044 6623">
-            </div>
+            <div class="form-fields" style="width: min(92%, 450px); margin: 0 auto;">
+                <div class="card-wrapper mb-32" style="display: flex; justify-content: center; width: 360px; margin: 0 auto 80px;"></div>
 
-            <div class="input-container mb-16">
-                <label for="expiry" class="tbk-label">Vencimiento (MM/YY):</label>
-                <input type="text" id="expiry" name="expiry" class="tbk-input-text" placeholder="MM/YY" required value="11/23">
-            </div>
+                <div class="input-container mb-16" style="margin-bottom: 16px;">
+                    <label for="number" class="tbk-label">Número de tarjeta:</label>
+                    <input type="text" id="number" name="number" class="tbk-input-text" placeholder="0000 0000 0000 0000" required value="4051 8856 0044 6623" style="width: 100%;">
+                </div>
 
-            <div class="input-container mb-16">
-                <label for="cvc" class="tbk-label">CVC:</label>
-                <input type="password" id="cvc" name="cvc" class="tbk-input-text" placeholder="123" required value="123">
-            </div>
+                <div class="row" style="display:flex; gap:16px;">
+                    <div class="input-container" style="flex:1; min-width:0;">
+                        <label for="expiry" class="tbk-label">Vencimiento (MM/YY):</label>
+                        <input type="text" id="expiry" name="expiry" class="tbk-input-text" placeholder="MM/YY" required value="11/23" style="width:100%;">
+                    </div>
 
-            <div class="tbk-card-footer">
-                <button type="submit" class="tbk-button primary">Pagar</button>
+                    <div class="input-container" style="flex:1; min-width:0;">
+                        <label for="cvc" class="tbk-label">CVC:</label>
+                        <input type="password" id="cvc" name="cvc" class="tbk-input-text" placeholder="123" required value="123" style="width:100%;">
+                    </div>
+                </div>
             </div>
         </form>
+
+        <div class="card-border"></div>
+
+        <div class="tbk-card-footer" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+            <img src="~/credit.svg" alt="Logos de tarjetas de crédito" width="230" height="36" style="object-fit:contain;">
+            <button type="submit" form="card-form" class="tbk-button primary">Pagar</button>
+        </div>
     </div>
 </div>
 
