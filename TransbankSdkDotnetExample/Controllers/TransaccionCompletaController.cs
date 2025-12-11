@@ -23,6 +23,7 @@ public class TransaccionCompletaController : Controller
         ));
     }
 
+    [HttpGet("")]
     [HttpGet("index")]
     public IActionResult Index()
     {
