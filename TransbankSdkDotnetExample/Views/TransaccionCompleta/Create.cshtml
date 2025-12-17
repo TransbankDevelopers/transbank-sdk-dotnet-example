@@ -29,24 +29,21 @@
 
 <pre>
     <code class="language-csharp mb-32">
-using Transbank.Webpay.TransaccionCompleta;
-
-var tx = new FullTransaction(
-    new Options(
-        IntegrationCommerceCodes.TRANSACCION_COMPLETA, 
-        IntegrationApiKeys.WEBPAY, 
-        WebpayIntegrationType.Test
-    )
+const tx = new TransaccionCompleta.Transaction(
+  new Options(
+    IntegrationCommerceCodes.TRANSACCION_COMPLETA,
+    IntegrationApiKeys.WEBPAY,
+    Environment.Integration
+  )
 );
-
-var response = tx.Create(
-    buyOrder, 
-    sessionId, 
-    amount, 
-    cvv, 
-    cardNumber, 
-    cardExpirationDate
-);
+const response = await tx.create(
+  buyOrder,
+  sessionId,
+  amount,
+  cvv,
+  cardNumber,
+  cardExpirationDate
+); 
     </code>
 </pre>
 
