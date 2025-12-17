@@ -9,7 +9,7 @@
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
-        <a href="/transaccion-completa/index">Transacción Completa</a>
+        <a href="/transaccion-completa/index">Webpay Transacción Completa</a>
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
@@ -52,7 +52,7 @@ var response = tx.Create(
 
 <h2 id="response">Paso 2: Respuesta</h2>
 <p class="mb-32">
-    Una vez creada la transacción, recibirás los siguientes datos de respuesta (incluyendo el Token):
+    Una vez creada la transacción, recibirás los siguientes datos de respuesta:
 </p>
 
 <pre><code class="language-json mb-32">@Html.Raw(ViewBag.response)</code></pre>
@@ -61,10 +61,10 @@ var response = tx.Create(
 <p class="mb-16">Ahora que hemos creado la transacción, se abren dos opciones para continuar:</p>
 <ul class="bullet-list mb-32">
     <li>
-        <span class="fw-bold">Consultar Cuotas (opcional):</span> Alternativamente puedes realizar consultas de cuotas para ofrecer opciones de pago a plazos.
+        <strong>Consultar Cuotas (opcional):</strong> Alternativamente puedes realizar consultas de cuotas para ofrecer opciones de pago a plazos.
     </li>
     <li>
-        <span class="fw-bold">Confirmar Transacción:</span> Debes confirmar directamente la transacción para finalizar con el proceso de pago (sin cuotas).
+        <strong>Confirmar Transacción:</strong> Debes confirmar directamente la transacción para finalizar con el proceso de pago.
     </li>
 </ul>
 
