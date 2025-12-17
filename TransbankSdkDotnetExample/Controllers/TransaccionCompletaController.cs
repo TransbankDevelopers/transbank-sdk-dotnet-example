@@ -61,7 +61,7 @@ public class TransaccionCompletaController : Controller
             ViewBag.CardNumber = cardNumberClean;
             ViewBag.Expiry = cardExpiryFormatted;
             ViewBag.Cvc = cvc;
-            ViewBag.InstallmentsNumber = installments_number;
+            ViewBag.InstallmentsNumber = 3;
             ViewBag.Token = createResponse.Token;
 
             return View();
