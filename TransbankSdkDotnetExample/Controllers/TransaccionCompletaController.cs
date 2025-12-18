@@ -118,6 +118,7 @@ public class TransaccionCompletaController : Controller
         {
             RefundResponse response = _transaction.Refund(token, amount);
             ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(response), new JsonSerializerOptions { WriteIndented = true });
+            ViewBag.Token = token;
             return View();
         }
         catch (Exception e)
