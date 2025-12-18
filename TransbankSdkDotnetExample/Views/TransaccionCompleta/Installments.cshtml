@@ -48,8 +48,6 @@ const response = await tx.installments(token, installmentsNumber);
 
 <form method="POST">
     <div class="tbk-card">
-        <span class="tbk-card-title">Datos de la consulta</span>
-
         <div class="input-container mb-16">
             <label for="token" class="tbk-label">Token</label>
             <input type="text" id="token" name="token" class="tbk-input-text" value="@ViewBag.Token" readonly>
@@ -73,15 +71,23 @@ const response = await tx.installments(token, installmentsNumber);
 
 @section Scripts {
     <script>
-        //---TODO: Implementar la lógica para actualizar los valores del token e idQueryInstallments ---
-        // Actualizar los valores del token e idQueryInstallments si es necesario
         document.addEventListener('DOMContentLoaded', function() {
             const tokenInput = document.getElementById('token');
             const idQueryInstallmentsInput = document.getElementById('idQueryInstallments');
 
-            // Aquí puedes agregar lógica adicional si es necesaria
-            console.log('Token:', tokenInput.value);
-            console.log('ID Query Installments:', idQueryInstallmentsInput.value);
+            try {
+                const responseRaw = `@Html.Raw(ViewBag.Response)`;
+                if (responseRaw) {
+                    const response = JSON.parse(responseRaw);
+                    const idQueryInstallments = response.IdQueryInstallments || (response.OriginalResponse && response.OriginalResponse.id_query_installments);
+                    
+                    if (idQueryInstallments) {
+                        idQueryInstallmentsInput.value = idQueryInstallments;
+                    }
+                }
+            } catch (e) {
+                console.error('Error al parsear la respuesta:', e);
+            }
         });
     </script>
 }
