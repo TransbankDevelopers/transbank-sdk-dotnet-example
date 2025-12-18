@@ -72,13 +72,13 @@ const response = await tx.create(
         <div class="input-container mb-16">
             <label for="installments_number" class="tbk-label">N° de cuotas:</label>
             <input type="text" id="installments_number" name="installments_number" class="tbk-input-text" value="@ViewBag.InstallmentsNumber">
-            <input type="hidden" name="token" value="@ViewBag.Token">
         </div>
 
         <div class="tbk-card-footer" style="display: flex; gap: 16px;">
             <button type="submit" 
                     asp-controller="TransaccionCompleta" 
                     asp-action="Installments" 
+                    asp-route-token="@ViewBag.Token"
                     class="tbk-button primary mr-16">
                 CONSULTAR CUOTAS
             </button>
@@ -86,6 +86,7 @@ const response = await tx.create(
             <button type="submit" 
                     asp-controller="TransaccionCompleta" 
                     asp-action="Commit" 
+                    asp-route-token="@ViewBag.Token"
                     class="tbk-button primary">
                 CONFIRMAR
             </button>

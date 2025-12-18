@@ -41,12 +41,12 @@ const response = await tx.installments(token, installmentsNumber);
 <h2 id="response">Paso 2: Respuesta</h2>
 <p class="mb-32">Una vez realizada la consulta de cuotas, recibirás los siguientes datos de respuesta:</p>
 
-<pre><code class="language-json mb-32">@Html.Raw(ViewBag.Response)</code></pre>
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.response)</code></pre>
 
 <h2 id="form">Confirmar Transacción</h2>
 <p class="mb-16">Si decides utilizar cuotas y estás satisfecho con las condiciones obtenidas en la consulta, el siguiente paso sería confirmar la transacción.</p>
 
-<form method="POST">
+<form asp-controller="TransaccionCompleta" asp-action="Commit" asp-route-token="@ViewBag.Token" method="post" class="tbk-form">
     <div class="tbk-card">
         <div class="input-container mb-16">
             <label for="token" class="tbk-label">Token</label>
@@ -59,10 +59,7 @@ const response = await tx.installments(token, installmentsNumber);
         </div>
 
         <div class="tbk-card-footer">
-            <button type="submit" 
-                    asp-controller="TransaccionCompleta" 
-                    asp-action="Commit" 
-                    class="tbk-button primary">
+            <button type="submit" class="tbk-button primary">
                 CONFIRMAR TRANSACCIÓN
             </button>
         </div>
@@ -76,7 +73,7 @@ const response = await tx.installments(token, installmentsNumber);
             const idQueryInstallmentsInput = document.getElementById('idQueryInstallments');
 
             try {
-                const responseRaw = `@Html.Raw(ViewBag.Response)`;
+                const responseRaw = `@Html.Raw(ViewBag.response)`;
                 if (responseRaw) {
                     const response = JSON.parse(responseRaw);
                     const idQueryInstallments = response.IdQueryInstallments || (response.OriginalResponse && response.OriginalResponse.id_query_installments);
