@@ -91,16 +91,17 @@ public class TransaccionCompletaController : Controller
     }
 
     [HttpPost("commit")]
-    public IActionResult Commit(string token, int idQueryInstallments, int deferredPeriodIndex, bool gracePeriod)
+    public IActionResult Commit(string token, int? idQueryInstallments, int? deferredPeriodIndex, bool gracePeriod)
     {
         try
         {
-            CommitResponse response = _transaction.Commit(token, idQueryInstallments, (sbyte)deferredPeriodIndex, gracePeriod);
+            CommitResponse response = _transaction.Commit(token, idQueryInstallments, deferredPeriodIndex, gracePeriod);
 
             var amount = HttpContext.Session.GetString("tc_amount");
             
             ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(response), new JsonSerializerOptions { WriteIndented = true });
             ViewBag.Amount = amount;
+            ViewBag.Token = token;
 
             return View();
         }
