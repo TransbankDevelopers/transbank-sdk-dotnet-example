@@ -1,0 +1,55 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Estado de transacción";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a href="/transaccion-completa/index">Webpay Transacción Completa</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <span class="current-breadcrumb">Status</span>
+    </div>
+</div>
+
+<h1>Transacción Completa - Estado de transacción</h1>
+<p class="mb-32">
+    En esta fase, tendrás la capacidad de solicitar el estado actual de una transacción hasta 7 días
+    después de su realización. Es importante destacar que no hay límite en la cantidad de solicitudes de este tipo
+    durante este período. Sin embargo, una vez transcurridos los 7 días, ya no podrás revisar el estado de la
+    transacción.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">
+    Para llevar a cabo la solicitud de estado, necesitarás el token correspondiente a la transacción
+    de la cual deseas obtener información. Utiliza este token para realizar una llamada a
+    Transaction.status().
+</p>
+
+<pre>
+    <code class="language-csharp mb-32">
+var tx = new FullTransaction(
+    new Options(
+        IntegrationCommerceCodes.TRANSACCION_COMPLETA,
+        IntegrationApiKeys.WEBPAY,
+        WebpayIntegrationType.Test
+    )
+);
+
+var response = tx.Status(token);
+    </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+    Transbank responderá con la siguiente información. Asegúrate de guardar estos detalles; lo único que necesitas
+    validar es que el campo "response_code" sea igual a cero.
+</p>
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.response)</code></pre>
