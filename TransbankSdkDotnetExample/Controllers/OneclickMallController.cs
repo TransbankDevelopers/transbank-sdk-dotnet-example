@@ -55,12 +55,46 @@ public class OneclickMallController : Controller
     }
 
     [HttpGet("finish")]
-    public IActionResult Finish([FromQuery(Name = "TBK_TOKEN")] string? token)
+    [HttpPost("finish")]
+    public IActionResult Finish(
+        [ModelBinder(Name = "TBK_TOKEN")] string? token,
+        [ModelBinder(Name = "TBK_ORDEN_COMPRA")] string? tbkOrdenCompra,
+        [ModelBinder(Name = "TBK_ID_SESION")] string? tbkIdSesion)
     {
+        var requestData = new Dictionary<string, string>();
+        if (token != null) requestData.Add("TBK_TOKEN", token);
+        if (tbkOrdenCompra != null) requestData.Add("TBK_ORDEN_COMPRA", tbkOrdenCompra);
+        if (tbkIdSesion != null) requestData.Add("TBK_ID_SESION", tbkIdSesion);
+
+        ViewBag.productName = "Webpay Oneclick Mall";
+        ViewBag.requestData = requestData;
+
+        if (!string.IsNullOrEmpty(token) && string.IsNullOrEmpty(tbkOrdenCompra) && string.IsNullOrEmpty(tbkIdSesion))
+        {
+            return View("~/Views/Shared/error/timeout.cshtml");
+        }
+
+        if (Request.Method == "POST" && !string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(tbkOrdenCompra))
+        {
+            return View("~/Views/Shared/error/form_error.cshtml");
+        }
+
+        if (!string.IsNullOrEmpty(tbkOrdenCompra))
+        {
+            return View("~/Views/Shared/error/recover.cshtml");
+        }
+
         try
         {
             var resp = _inscription.Finish(token);
             HttpContext.Session.Set("tbk_user", System.Text.Encoding.UTF8.GetBytes(resp.ToString()));
+
+            if (resp.ResponseCode != 0)
+            {
+                ViewBag.token = token;
+                ViewBag.resp = resp;
+                return View("~/Views/Shared/error/rejected.cshtml");
+            }
 
             ViewBag.RequestData = new Dictionary<string, string>
                 {
