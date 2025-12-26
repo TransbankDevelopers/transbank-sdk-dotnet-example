@@ -67,11 +67,14 @@ public class OneclickMallDeferredController : Controller
         ViewBag.productName = "Webpay Oneclick Mall Diferido";
         ViewBag.requestData = requestData;
 
+        if (Request.Method == "POST" && !string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(tbkOrdenCompra))
+        {
+            return View("~/Views/Shared/error/form_error.cshtml");
+        }
         if (!string.IsNullOrEmpty(tbkOrdenCompra))
         {
             return View("~/Views/Shared/error/recover.cshtml");
         }
-
         if (string.IsNullOrEmpty(token))
         {
              return View("~/Views/Shared/error/timeout.cshtml");
