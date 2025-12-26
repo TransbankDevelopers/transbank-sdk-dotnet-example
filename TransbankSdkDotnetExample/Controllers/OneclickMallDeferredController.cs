@@ -59,31 +59,39 @@ public class OneclickMallDeferredController : Controller
         [ModelBinder(Name = "TBK_ORDEN_COMPRA")] string? tbkOrdenCompra,
         [ModelBinder(Name = "TBK_ID_SESION")] string? tbkIdSesion)
     {
+        var hasToken = !string.IsNullOrEmpty(token);
+        var hasTbkOrdenCompra = !string.IsNullOrEmpty(tbkOrdenCompra);
+        var hasTbkIdSesion = !string.IsNullOrEmpty(tbkIdSesion);
+
         var requestData = new Dictionary<string, string>();
-        if (token != null) requestData.Add("TBK_TOKEN", token);
-        if (tbkOrdenCompra != null) requestData.Add("TBK_ORDEN_COMPRA", tbkOrdenCompra);
-        if (tbkIdSesion != null) requestData.Add("TBK_ID_SESION", tbkIdSesion);
+        if (hasToken) requestData.Add("TBK_TOKEN", token!);
+        if (hasTbkOrdenCompra) requestData.Add("TBK_ORDEN_COMPRA", tbkOrdenCompra!);
+        if (hasTbkIdSesion) requestData.Add("TBK_ID_SESION", tbkIdSesion!);
 
         ViewBag.productName = "Webpay Oneclick Mall Diferido";
         ViewBag.requestData = requestData;
 
-        if (Request.Method == "POST" && !string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(tbkOrdenCompra))
+        if (Request.Method == "POST" && hasToken && hasTbkOrdenCompra)
         {
             return View("~/Views/Shared/error/form_error.cshtml");
         }
-        if (!string.IsNullOrEmpty(tbkOrdenCompra))
+        if (hasTbkOrdenCompra)
         {
             return View("~/Views/Shared/error/recover.cshtml");
-        }
-        if (string.IsNullOrEmpty(token))
-        {
-             return View("~/Views/Shared/error/timeout.cshtml");
         }
 
         try
         {
             var resp = _inscription.Finish(token);
             HttpContext.Session.Set("tbk_user", System.Text.Encoding.UTF8.GetBytes(resp.ToString()));
+
+
+            if (resp.ResponseCode == -96)
+            {
+                ViewBag.token = token;
+                ViewBag.resp = resp;
+                return View("~/Views/Shared/error/timeout.cshtml");
+            }
 
             if (resp.ResponseCode != 0)
             {
