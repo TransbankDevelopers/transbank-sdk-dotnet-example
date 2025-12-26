@@ -67,19 +67,14 @@ public class OneclickMallDeferredController : Controller
         ViewBag.productName = "Webpay Oneclick Mall Diferido";
         ViewBag.requestData = requestData;
 
-        if (!string.IsNullOrEmpty(token) && string.IsNullOrEmpty(tbkOrdenCompra) && string.IsNullOrEmpty(tbkIdSesion))
-        {
-            return View("~/Views/Shared/error/timeout.cshtml");
-        }
-
-        if (Request.Method == "POST" && !string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(tbkOrdenCompra))
-        {
-            return View("~/Views/Shared/error/form_error.cshtml");
-        }
-
         if (!string.IsNullOrEmpty(tbkOrdenCompra))
         {
             return View("~/Views/Shared/error/recover.cshtml");
+        }
+
+        if (string.IsNullOrEmpty(token))
+        {
+             return View("~/Views/Shared/error/timeout.cshtml");
         }
 
         try
@@ -111,12 +106,12 @@ public class OneclickMallDeferredController : Controller
         catch (Exception e)
         {
             _logger.LogError(e, "Error al ejecutar Finish: {Message}", e.Message);
-            return View("~/Views/Shared/error/form_error.cshtml");
+            return View(ErrorPagePath, e.Message);
         }
     }
 
     [HttpGet("delete")]
-    public IActionResult Delete(string? username, [FromQuery(Name = "tbk_user")] string? tbkUser)
+    public IActionResult Delete([FromQuery] string? username, [FromQuery(Name = "tbk_user")] string? tbkUser)
     {
         try
         {
@@ -131,10 +126,12 @@ public class OneclickMallDeferredController : Controller
     }
 
     [HttpGet("authorize")]
-    public IActionResult Authorize([FromQuery] Dictionary<string, string> query)
+    public IActionResult Authorize()
     {
         try
         {
+            var query = Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+
             string? username = query.GetValueOrDefault("username");
             string? tbkUser = query.GetValueOrDefault("tbk_user");
             string? childCommerceCode1 = query.GetValueOrDefault("child_commerce_code1");
