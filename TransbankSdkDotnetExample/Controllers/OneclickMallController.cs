@@ -60,28 +60,31 @@ public class OneclickMallController : Controller
     public IActionResult Finish(
         [ModelBinder(Name = "TBK_TOKEN")] string? token,
         [ModelBinder(Name = "TBK_ORDEN_COMPRA")] string? tbkOrdenCompra,
-        [ModelBinder(Name = "TBK_ID_SESION")] string? tbkIdSesion)
+        [ModelBinder(Name = "TBK_ID_SESION")] string? tbkIdSesion,
+        [ModelBinder(Name = "token_ws")] string? token_ws)
     {
-        var hasToken = !string.IsNullOrEmpty(token);
+        var hasTBKToken = !string.IsNullOrEmpty(token);
         var hasTbkOrdenCompra = !string.IsNullOrEmpty(tbkOrdenCompra);
         var hasTbkIdSesion = !string.IsNullOrEmpty(tbkIdSesion);
+        var hasTokenWs = !string.IsNullOrEmpty(token_ws);
 
         var requestData = new Dictionary<string, string>();
-        if (hasToken) requestData.Add("TBK_TOKEN", token!);
+        if (hasTBKToken) requestData.Add("TBK_TOKEN", token!);
         if (hasTbkOrdenCompra) requestData.Add("TBK_ORDEN_COMPRA", tbkOrdenCompra!);
         if (hasTbkIdSesion) requestData.Add("TBK_ID_SESION", tbkIdSesion!);
+        if (hasTokenWs) requestData.Add("token_ws", token_ws!);
 
         ViewBag.productName = "Webpay Oneclick Mall";
         ViewBag.requestData = requestData;
 
-        if (Request.Method == "POST" && hasToken && hasTbkOrdenCompra)
+        if (Request.Method == "POST" && hasTBKToken && hasTbkOrdenCompra && hasTokenWs)
         {
             return View("~/Views/Shared/error/form_error.cshtml");
         }
         
         if (hasTbkOrdenCompra)
         {
-            return View("~/Views/Shared/error/recover.cshtml");
+            return View("~/Views/Shared/error/Oneclick/aborted.cshtml");
         }
 
         try

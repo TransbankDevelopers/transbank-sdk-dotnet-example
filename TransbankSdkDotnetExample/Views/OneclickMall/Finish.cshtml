@@ -112,3 +112,7 @@
 
 <a href="@Url.Action("Delete", "OneclickMall", new { tbk_user = ViewBag.TbkUser, username = ViewBag.Username })"
    class="tbk-button primary mt-16 mb-32">BORRAR USUARIO</a>
+
+<script>
+    console.log(@Html.Raw(ViewBag.ResponseJson));
+</script>
