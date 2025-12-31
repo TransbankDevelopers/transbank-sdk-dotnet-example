@@ -15,6 +15,7 @@ public class OneclickMallController : Controller
     private readonly MallInscription _inscription;
     private readonly MallTransaction _transaction;
     private const string ErrorPagePath = "~/Views/Shared/error/errorPage.cshtml";
+    private const int InscriptionSuccessfulCode = 0;
 
     public OneclickMallController(ILogger<OneclickMallController> logger)
     {
@@ -55,12 +56,48 @@ public class OneclickMallController : Controller
     }
 
     [HttpGet("finish")]
-    public IActionResult Finish([FromQuery(Name = "TBK_TOKEN")] string? token)
+    [HttpPost("finish")]
+    public IActionResult Finish(
+        [ModelBinder(Name = "TBK_TOKEN")] string? token,
+        [ModelBinder(Name = "TBK_ORDEN_COMPRA")] string? tbkOrdenCompra,
+        [ModelBinder(Name = "TBK_ID_SESION")] string? tbkIdSesion,
+        [ModelBinder(Name = "token_ws")] string? token_ws)
     {
+        var hasTBKToken = !string.IsNullOrEmpty(token);
+        var hasTbkOrdenCompra = !string.IsNullOrEmpty(tbkOrdenCompra);
+        var hasTbkIdSesion = !string.IsNullOrEmpty(tbkIdSesion);
+        var hasTokenWs = !string.IsNullOrEmpty(token_ws);
+
+        var requestData = new Dictionary<string, string>();
+        if (hasTBKToken) requestData.Add("TBK_TOKEN", token!);
+        if (hasTbkOrdenCompra) requestData.Add("TBK_ORDEN_COMPRA", tbkOrdenCompra!);
+        if (hasTbkIdSesion) requestData.Add("TBK_ID_SESION", tbkIdSesion!);
+        if (hasTokenWs) requestData.Add("token_ws", token_ws!);
+
+        ViewBag.productName = "Webpay Oneclick Mall";
+        ViewBag.requestData = requestData;
+
+        if (Request.Method == "POST" && hasTBKToken && hasTbkOrdenCompra && hasTokenWs)
+        {
+            return View("~/Views/Shared/error/form_error.cshtml");
+        }
+        
+        if (hasTbkOrdenCompra)
+        {
+            return View("~/Views/Shared/error/Oneclick/aborted.cshtml");
+        }
+
         try
         {
             var resp = _inscription.Finish(token);
             HttpContext.Session.Set("tbk_user", System.Text.Encoding.UTF8.GetBytes(resp.ToString()));
+
+            if (resp.ResponseCode != InscriptionSuccessfulCode)
+            {
+                ViewBag.token = token;
+                ViewBag.resp = resp;
+                return View("~/Views/Shared/error/rejected.cshtml");
+            }
 
             ViewBag.RequestData = new Dictionary<string, string>
                 {
@@ -84,7 +121,7 @@ public class OneclickMallController : Controller
     }
 
     [HttpGet("delete")]
-    public IActionResult Delete(string? username, [FromQuery(Name = "tbk_user")] string? tbkUser)
+    public IActionResult Delete([FromQuery] string? username, [FromQuery(Name = "tbk_user")] string? tbkUser)
     {
         try
         {
@@ -99,10 +136,12 @@ public class OneclickMallController : Controller
     }
 
     [HttpGet("authorize")]
-    public IActionResult Authorize([FromQuery] Dictionary<string, string> query)
+    public IActionResult Authorize()
     {
         try
         {
+            var query = Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+
             string? username = query.GetValueOrDefault("username");
             string? tbkUser = query.GetValueOrDefault("tbk_user");
             string? childCommerceCode1 = query.GetValueOrDefault("child_commerce_code1");
