@@ -85,14 +85,6 @@ public class OneclickMallDeferredController : Controller
             var resp = _inscription.Finish(token);
             HttpContext.Session.Set("tbk_user", System.Text.Encoding.UTF8.GetBytes(resp.ToString()));
 
-
-            if (resp.ResponseCode == -96)
-            {
-                ViewBag.token = token;
-                ViewBag.resp = resp;
-                return View("~/Views/Shared/error/timeout.cshtml");
-            }
-
             if (resp.ResponseCode != InscriptionSuccessfulCode)
             {
                 ViewBag.token = token;
