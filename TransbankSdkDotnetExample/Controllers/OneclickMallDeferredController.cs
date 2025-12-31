@@ -14,8 +14,8 @@ public class OneclickMallDeferredController : Controller
     private readonly ILogger<OneclickMallDeferredController> _logger;
     private readonly MallInscription _inscription;
     private readonly MallTransaction _transaction;
-
     private const string ErrorPagePath = "~/Views/Shared/error/errorPage.cshtml";
+    private const int InscriptionSuccessfulCode = 0;
 
     public OneclickMallDeferredController(ILogger<OneclickMallDeferredController> logger)
     {
@@ -93,7 +93,7 @@ public class OneclickMallDeferredController : Controller
                 return View("~/Views/Shared/error/timeout.cshtml");
             }
 
-            if (resp.ResponseCode != 0)
+            if (resp.ResponseCode != InscriptionSuccessfulCode)
             {
                 ViewBag.token = token;
                 ViewBag.resp = resp;
