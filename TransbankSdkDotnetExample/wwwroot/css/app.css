@@ -1207,3 +1207,50 @@ code {
     margin-top: 40px;
     width: 100%;
 }
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.max-w-none {
+    max-width: none;
+}
+
+.form-container {
+    width: min(92%, 450px);
+    margin: 0 auto;
+}
+
+.card-display-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 360px;
+    margin: 0 auto 80px;
+}
+
+.flex-gap-16 {
+    display: flex;
+    gap: 16px;
+}
+
+.flex-grow {
+    flex: 1;
+    min-width: 0;
+}
+
+.footer-spread {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.object-fit-contain {
+    object-fit: contain;
+}

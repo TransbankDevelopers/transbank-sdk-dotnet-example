@@ -74,12 +74,12 @@ const response = await tx.create(
             <input type="text" id="installments_number" name="installments_number" class="tbk-input-text" value="@ViewBag.InstallmentsNumber">
         </div>
 
-        <div class="tbk-card-footer" style="display: flex; gap: 16px;">
+        <div class="tbk-card-footer flex-gap-16">
             <button type="submit" 
                     asp-controller="TransaccionCompleta" 
                     asp-action="Installments" 
                     asp-route-token="@ViewBag.Token"
-                    class="tbk-button primary mr-16">
+                    class="tbk-button primary">
                 CONSULTAR CUOTAS
             </button>
 
