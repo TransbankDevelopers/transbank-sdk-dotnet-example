@@ -1,0 +1,86 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Transacción Completa";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <span class="current-breadcrumb">Webpay Transacción Completa</span>
+    </div>
+</div>
+
+<h1>Transacción Completa - Formulario</h1>
+<p class="mb-32">
+    En esta primera etapa necesitas obtener los datos esenciales de la tarjeta de crédito, débito o prepago del titular. Utiliza el formulario para recolectar esta información de manera segura.
+</p>
+
+<div class="flex-center">
+    <div class="tbk-card w-full max-w-none">
+        <form id="card-form" method="POST" action="/transaccion-completa/create">
+            <div class="form-fields form-container">
+                <div class="card-wrapper mb-32 card-display-wrapper"></div>
+
+                <div class="input-container mb-16">
+                    <label for="number" class="tbk-label">Número de tarjeta:</label>
+                    <input type="text" id="number" name="number" class="tbk-input-text w-full" placeholder="0000 0000 0000 0000" required value="4051 8856 0044 6623">
+                </div>
+
+                <div class="row flex-gap-16">
+                    <div class="input-container flex-grow">
+                        <label for="expiry" class="tbk-label">Vencimiento (MM/YY):</label>
+                        <input type="text" id="expiry" name="expiry" class="tbk-input-text w-full" placeholder="MM/YY" required value="11/23">
+                    </div>
+
+                    <div class="input-container flex-grow">
+                        <label for="cvc" class="tbk-label">CVC:</label>
+                        <input type="password" id="cvc" name="cvc" class="tbk-input-text w-full" placeholder="123" required value="123">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="card-border"></div>
+
+        <div class="tbk-card-footer footer-spread">
+            <img src="~/credit.svg" alt="Logos de tarjetas de crédito" width="230" height="36" class="object-fit-contain">
+            <button type="submit" form="card-form" class="tbk-button primary">Pagar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script 
+        src="https://cdnjs.cloudflare.com/ajax/libs/card/2.5.0/card.min.js" 
+        integrity="sha384-SQa3lcWrAfgRdTZ1oDnDsmh4s+tgkd2qNbzYtYkcTLBU4GN/hC+WAfmHa4DlU1tn" 
+        crossorigin="anonymous">
+    </script>
+    <script>
+        var card = new Card({
+            form: '#card-form',
+            container: '.card-wrapper',
+            formSelectors: {
+                numberInput: 'input[name="number"]',
+                expiryInput: 'input[name="expiry"]',
+                cvcInput: 'input[name="cvc"]',
+                nameInput: 'input[name="name"]'
+            },
+            width: 300,
+            placeholders: {
+                number: '•••• •••• •••• ••••',
+                name: 'TEST USER',
+                expiry: '••/••',
+                cvc: '•••'
+            },
+            debug: false
+        });
+
+        ['number','expiry','cvc'].forEach(function(name){
+            var el = document.querySelector('input[name="'+name+'"]');
+            if(el) el.dispatchEvent(new Event('keyup'));
+        });
+    </script>
+}

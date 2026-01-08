@@ -1,0 +1,90 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Consulta de cuotas";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a href="/transaccion-completa/index">Webpay Transacción Completa</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <span class="current-breadcrumb">Consulta de cuotas</span>
+    </div>
+</div>
+
+<h1>Transacción Completa - Consulta de cuotas</h1>
+<p class="mb-32">
+    En esta etapa, realizaremos una consulta de cuotas para conocer sus condiciones. Es importante destacar que este paso es opcional y se utiliza únicamente si deseas ofrecer opciones de pago a plazos.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">Para llevar a cabo la consulta de cuotas, debemos enviar los siguientes datos relevantes.</p>
+
+<pre>
+    <code class="language-csharp mb-32">
+const tx = new TransaccionCompleta.Transaction(
+  new Options(
+    IntegrationCommerceCodes.TRANSACCION_COMPLETA,
+    IntegrationApiKeys.WEBPAY,
+    Environment.Integration
+  )
+);
+const response = await tx.installments(token, installmentsNumber);
+    </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">Una vez realizada la consulta de cuotas, recibirás los siguientes datos de respuesta:</p>
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.response)</code></pre>
+
+<h2 id="form">Confirmar Transacción</h2>
+<p class="mb-16">Si decides utilizar cuotas y estás satisfecho con las condiciones obtenidas en la consulta, el siguiente paso sería confirmar la transacción.</p>
+
+<form asp-controller="TransaccionCompleta" asp-action="Commit" asp-route-token="@ViewBag.Token" method="post" class="tbk-form">
+    <div class="tbk-card">
+        <div class="input-container mb-16">
+            <label for="token" class="tbk-label">Token</label>
+            <input type="text" id="token" name="token" class="tbk-input-text" value="@ViewBag.Token" readonly>
+        </div>
+
+        <div class="input-container mb-32">
+            <label for="idQueryInstallments" class="tbk-label">ID de consulta de cuotas (Opcional)</label>
+            <input type="text" id="idQueryInstallments" name="idQueryInstallments" class="tbk-input-text" value="@(ViewBag.IdQueryInstallments ?? "")">
+        </div>
+
+        <div class="tbk-card-footer">
+            <button type="submit" class="tbk-button primary">
+                CONFIRMAR TRANSACCIÓN
+            </button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tokenInput = document.getElementById('token');
+            const idQueryInstallmentsInput = document.getElementById('idQueryInstallments');
+
+            try {
+                const responseRaw = `@Html.Raw(ViewBag.response)`;
+                if (responseRaw) {
+                    const response = JSON.parse(responseRaw);
+                    const idQueryInstallments = response.IdQueryInstallments || (response.OriginalResponse && response.OriginalResponse.id_query_installments);
+                    
+                    if (idQueryInstallments) {
+                        idQueryInstallmentsInput.value = idQueryInstallments;
+                    }
+                }
+            } catch (e) {
+                console.error('Error al parsear la respuesta:', e);
+            }
+        });
+    </script>
+}
