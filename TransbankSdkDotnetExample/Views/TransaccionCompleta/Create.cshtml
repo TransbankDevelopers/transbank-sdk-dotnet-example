@@ -1,0 +1,95 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Crear Transacción";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/transaccion-completa/index">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a href="/transaccion-completa/index">Webpay Transacción Completa</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <span class="current-breadcrumb">Crear Transacción</span>
+    </div>
+</div>
+
+<h1>Transacción Completa - Crear transacción</h1>
+<p class="mb-32">
+    En este paso sucede la creación de la transacción con el objetivo de obtener un identificador único para la misma.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">
+    Comienza importando la librería TransaccionCompleta, y a continuación, crea la transacción necesaria.
+</p>
+
+<pre>
+    <code class="language-csharp mb-32">
+const tx = new TransaccionCompleta.Transaction(
+  new Options(
+    IntegrationCommerceCodes.TRANSACCION_COMPLETA,
+    IntegrationApiKeys.WEBPAY,
+    Environment.Integration
+  )
+);
+const response = await tx.create(
+  buyOrder,
+  sessionId,
+  amount,
+  cvv,
+  cardNumber,
+  cardExpirationDate
+); 
+    </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+    Una vez creada la transacción, recibirás los siguientes datos de respuesta:
+</p>
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.response)</code></pre>
+
+<h2 id="form">¡Transacción creada!</h2>
+<p class="mb-16">Ahora que hemos creado la transacción, se abren dos opciones para continuar:</p>
+<ul class="bullet-list mb-32">
+    <li>
+        <strong>Consultar Cuotas (opcional):</strong> Alternativamente puedes realizar consultas de cuotas para ofrecer opciones de pago a plazos.
+    </li>
+    <li>
+        <strong>Confirmar Transacción:</strong> Debes confirmar directamente la transacción para finalizar con el proceso de pago.
+    </li>
+</ul>
+
+<form method="POST">
+    <div class="tbk-card">
+        <span class="tbk-card-title">Formulario de redirección</span>
+        
+        <div class="input-container mb-16">
+            <label for="installments_number" class="tbk-label">N° de cuotas:</label>
+            <input type="text" id="installments_number" name="installments_number" class="tbk-input-text" value="@ViewBag.InstallmentsNumber">
+        </div>
+
+        <div class="tbk-card-footer flex-gap-16">
+            <button type="submit" 
+                    asp-controller="TransaccionCompleta" 
+                    asp-action="Installments" 
+                    asp-route-token="@ViewBag.Token"
+                    class="tbk-button primary">
+                CONSULTAR CUOTAS
+            </button>
+
+            <button type="submit" 
+                    asp-controller="TransaccionCompleta" 
+                    asp-action="Commit" 
+                    asp-route-token="@ViewBag.Token"
+                    class="tbk-button primary">
+                CONFIRMAR
+            </button>
+        </div>
+    </div>
+</form>

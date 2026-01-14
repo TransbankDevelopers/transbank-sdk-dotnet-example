@@ -1,0 +1,40 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 id="rejected">@ViewBag.productName - Inscripción fallida</h1>
+<p class="mb-32">
+    En esta fase, pueden surgir inconvenientes, ya sea con el titular de la tarjeta o a nivel bancario, lo que
+    resulta en una inscripción fallida.
+</p>
+
+<h2 id="data">Paso 1: Datos recibidos</h2>
+<p class="mb-32">
+    Después de finalizar el flujo en el formulario de inscripción, recibirás un GET con la siguiente información:
+</p>
+<pre class="mb-32">
+  <code class="language-json">@Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.requestData, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }))</code>
+</pre>
+
+<h2 id="request">Paso 2: Petición de autorización</h2>
+<p class="mb-32">
+    Utiliza el token recibido para finalizar la Inscripción mediante una nueva llamada a Oneclick.
+</p>
+
+<pre>
+    <code class="language-csharp">
+var resp = inscription.Finish(token);
+    </code>
+</pre>
+
+<h2 id="response">Paso 3: Respuesta</h2>
+<p class="mb-32">
+    Transbank responderá con la siguiente información.
+</p>
+
+<pre class="mb-32">
+  <code class="language-json">@Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.resp, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }))</code>
+</pre>
+
+
+<p class="mb-32">En este caso la inscripción fue rechazada, tendrás que repetir el proceso</p>
