@@ -1,0 +1,84 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Capturar Transacción";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a href="/transaccion-completa/index">Webpay Transacción Completa</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <span class="current-breadcrumb">Confirmar</span>
+    </div>
+</div>
+
+<h1>Transacción Completa Diferida - Capturar transacción</h1>
+<p class="mb-32">
+  En este paso debemos capturar la transacción para realmente capturar el dinero que habia sido previamente reservado al hacer la transacción.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">
+  Para capturar una transacción, necesitaremos el Token, la Orden de compra, el Código de autorización y el monto a capturar.
+</p>
+
+<pre>
+    <code class="language-csharp mb-32">
+const tx = new FullTransaction(
+  new Options(
+    IntegrationCommerceCodes.TRANSACCION_COMPLETA_DEFERRED,
+    IntegrationApiKeys.WEBPAY,
+    Environment.Integration
+  )
+);
+const response = await tx.capture(token, buyOrder, authorizationCode, amount);
+    </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+  Una vez capturada la transacción, recibirás los siguientes datos de respuesta:
+</p>
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.response)</code></pre>
+
+<h2 id="form">Otras utilidades</h2>
+<p class="mb-16"> 
+  Con la transacción capturada, puedes mostrar al usuario una página de éxito de la transacción, proporcionándole la confirmación de que el proceso se ha completado con éxito.
+</p>
+
+<p>Después de capturar la transacción, podrás realizar otras operaciones útiles:</p>
+<ul class="bullet-list">
+    <li><span class="fw-700">Reembolsar:</span> Puedes reversar o anular el pago según ciertas condiciones
+        comerciales.</li>
+    <li><span class="fw-700">Consultar Estado:</span> Hasta 7 días después de realizada la transacción, podrás
+        consultar el estado de la transacción.</li>
+</ul>
+
+<form asp-controller="TransaccionCompletaDiferida" asp-action="Refund" method="GET">
+    <div class="tbk-card">
+        <div class="input-container mb-32">
+            <label for="amount" class="tbk-label">Monto a reembolsar</label>
+            <input type="text" id="amount" name="amount" class="tbk-input-text" value="@ViewBag.Amount">
+            <input type="hidden" name="token" value="@ViewBag.Token">
+        </div>
+
+        <div class="tbk-card-footer">
+            <button type="submit" class="tbk-button primary">REEMBOLSAR</button>
+        </div>
+    </div>
+</form>
+
+<div class="mt-32 mb-32">
+    <a asp-controller="TransaccionCompletaDiferida" 
+       asp-action="Status" 
+       asp-route-token="@ViewBag.Token" 
+       class="tbk-button primary">
+        CONSULTAR ESTADO
+    </a>
+</div>
