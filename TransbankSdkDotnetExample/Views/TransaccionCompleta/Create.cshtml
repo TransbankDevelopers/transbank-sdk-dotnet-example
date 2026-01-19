@@ -5,7 +5,7 @@
 
 <div class="breadcrumbs-container">
     <div class="breadcrumbs-items">
-        <a href="/transaccion-completa/index">Inicio</a>
+        <a href="/">Inicio</a>
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
@@ -29,7 +29,7 @@
 
 <pre>
     <code class="language-csharp mb-32">
-const tx = new TransaccionCompleta.Transaction(
+const tx = new FullTransaction(
   new Options(
     IntegrationCommerceCodes.TRANSACCION_COMPLETA,
     IntegrationApiKeys.WEBPAY,
@@ -69,17 +69,17 @@ const response = await tx.create(
     <div class="tbk-card">
         <span class="tbk-card-title">Formulario de redirección</span>
         
-        <div class="input-container mb-16">
+        <div class="input-container">
             <label for="installments_number" class="tbk-label">N° de cuotas:</label>
             <input type="text" id="installments_number" name="installments_number" class="tbk-input-text" value="@ViewBag.InstallmentsNumber">
         </div>
 
-        <div class="tbk-card-footer flex-gap-16">
+        <div class="tbk-card-footer">
             <button type="submit" 
                     asp-controller="TransaccionCompleta" 
                     asp-action="Installments" 
                     asp-route-token="@ViewBag.Token"
-                    class="tbk-button primary">
+                    class="tbk-button primary mr-16">
                 CONSULTAR CUOTAS
             </button>
 
