@@ -31,7 +31,7 @@ public class TransaccionCompletaController : Controller
     }
 
     [HttpPost("create")]
-    public IActionResult Create(string number, string cvc, string expiry, int installments_number)
+    public IActionResult Create(string number, string cvc, string expiry)
     {
         try
         {
