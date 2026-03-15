@@ -8,16 +8,16 @@ using TransbankSdkDotnetExample.Utils;
 
 namespace TransbankSdkDotnetExample.Controllers;
 
-[Route("transaccion-completa")]
-public class TransaccionCompletaController : Controller
+[Route("transaccion-completa-diferida")]
+public class TransaccionCompletaDiferidaController : Controller
 {
     private readonly FullTransaction _transaction;
     private const string ErrorPagePath = "~/Views/Shared/error/errorPage.cshtml";
 
-    public TransaccionCompletaController()
+    public TransaccionCompletaDiferidaController()
     {
         _transaction = new FullTransaction(new Options(
-            IntegrationCommerceCodes.TRANSACCION_COMPLETA,
+            IntegrationCommerceCodes.TRANSACCION_COMPLETA_DEFERRED,
             IntegrationApiKeys.WEBPAY,
             WebpayIntegrationType.Test
         ));
@@ -102,7 +102,29 @@ public class TransaccionCompletaController : Controller
             ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(response), new JsonSerializerOptions { WriteIndented = true });
             ViewBag.Amount = amount;
             ViewBag.Token = token;
+            ViewBag.BuyOrder = response.BuyOrder;
+            ViewBag.AuthorizationCode = response.AuthorizationCode;
+            
 
+            return View();
+        }
+        catch (Exception e)
+        {
+            return View(ErrorPagePath, model: e.Message);
+        }
+    }
+
+    [HttpGet("capture")]
+    public IActionResult Capture(string token, string buy_order, string authorization_code, int amount)
+    {
+        try
+        {
+            CaptureResponse response = _transaction.Capture(token, buy_order, authorization_code, amount);
+            ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(response), new JsonSerializerOptions {
+                WriteIndented = true
+            });
+            ViewBag.Token = token;
+            ViewBag.Amount = amount;
             return View();
         }
         catch (Exception e)

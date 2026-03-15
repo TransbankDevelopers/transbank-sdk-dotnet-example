@@ -1,6 +1,6 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Transacción Completa";
+    ViewData["Title"] = "Transacción Completa Diferida";
 }
 
 <div class="breadcrumbs-container">
@@ -9,16 +9,16 @@
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
-        <span class="current-breadcrumb">Webpay Transacción Completa</span>
+        <span class="current-breadcrumb">Webpay Transacción Completa Diferida</span>
     </div>
 </div>
 
-<h1>Transacción Completa - Formulario</h1>
+<h1>Transacción Completa Diferida - Formulario</h1>
 <p class="mb-32">
     En esta primera etapa necesitas obtener los datos esenciales de la tarjeta de crédito, débito o prepago del titular. Utiliza el formulario para recolectar esta información de manera segura.
 </p>
 <div class="tbk-shadow-2 tbk-card large ">
-    <form id="card-form" method="POST" action="/transaccion-completa/create">
+    <form id="card-form" method="POST" action="/transaccion-completa-diferida/create">
         <div class="card-container">
 
             <div class="card-wrapper mb-4"></div>

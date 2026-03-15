@@ -9,7 +9,7 @@
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
-        <a href="/transaccion-completa/index">Webpay Transacción Completa</a>
+        <a href="/transaccion-completa-diferida/index">Webpay Transacción Completa Diferida</a>
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<h1>Transacción Completa - Crear transacción</h1>
+<h1>Transacción Completa Diferida - Crear transacción</h1>
 <p class="mb-32">
     En este paso sucede la creación de la transacción con el objetivo de obtener un identificador único para la misma.
 </p>
@@ -31,7 +31,7 @@
     <code class="language-csharp mb-32">
 const tx = new FullTransaction(
   new Options(
-    IntegrationCommerceCodes.TRANSACCION_COMPLETA,
+    IntegrationCommerceCodes.TRANSACCION_COMPLETA_DEFERRED,
     IntegrationApiKeys.WEBPAY,
     Environment.Integration
   )
@@ -76,7 +76,7 @@ const response = await tx.create(
 
         <div class="tbk-card-footer">
             <button type="submit" 
-                    asp-controller="TransaccionCompleta" 
+                    asp-controller="TransaccionCompletaDiferida" 
                     asp-action="Installments" 
                     asp-route-token="@ViewBag.Token"
                     class="tbk-button primary mr-16">
@@ -84,7 +84,7 @@ const response = await tx.create(
             </button>
 
             <button type="submit" 
-                    asp-controller="TransaccionCompleta" 
+                    asp-controller="TransaccionCompletaDiferida" 
                     asp-action="Commit" 
                     asp-route-token="@ViewBag.Token"
                     class="tbk-button primary">

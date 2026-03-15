@@ -9,7 +9,7 @@
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
-        <a href="/transaccion-completa/index">Webpay Transacción Completa</a>
+        <a href="/transaccion-completa-diferida/index">Webpay Transacción Completa Diferida</a>
         <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
     </div>
     <div class="breadcrumbs-items">
@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<h1>Transacción Completa - Consulta de cuotas</h1>
+<h1>Transacción Completa Diferida - Consulta de cuotas</h1>
 <p class="mb-32">
     En esta etapa, realizaremos una consulta de cuotas para conocer sus condiciones. Es importante destacar que este paso es opcional y se utiliza únicamente si deseas ofrecer opciones de pago a plazos.
 </p>
@@ -29,7 +29,7 @@
     <code class="language-csharp mb-32">
 const tx = new FullTransaction(
   new Options(
-    IntegrationCommerceCodes.TRANSACCION_COMPLETA,
+    IntegrationCommerceCodes.TRANSACCION_COMPLETA_DEFERRED,
     IntegrationApiKeys.WEBPAY,
     Environment.Integration
   )
@@ -46,7 +46,7 @@ const response = await tx.installments(token, installmentsNumber);
 <h2 id="form">Confirmar Transacción</h2>
 <p class="mb-16">Si decides utilizar cuotas y estás satisfecho con las condiciones obtenidas en la consulta, el siguiente paso sería confirmar la transacción.</p>
 
-<form asp-controller="TransaccionCompleta" asp-action="Commit" asp-route-token="@ViewBag.Token" method="post" class="tbk-form">
+<form asp-controller="TransaccionCompletaDiferida" asp-action="Commit" asp-route-token="@ViewBag.Token" method="post" class="tbk-form">
     <div class="tbk-card">
         <div class="input-container mb-16">
             <label for="token" class="tbk-label">Token</label>
