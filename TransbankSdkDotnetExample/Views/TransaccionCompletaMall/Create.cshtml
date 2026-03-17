@@ -1,0 +1,102 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Crear Transacción";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a href="/transaccion-completa-mall/index">Webpay Transacción Completa Mall</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <span class="current-breadcrumb">Crear Transacción</span>
+    </div>
+</div>
+
+<h1>Transacción Completa Mall - Crear transacción</h1>
+<p class="mb-32">
+    En este paso sucede la creación de la transacción con el objetivo de obtener un identificador único para la misma.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">
+    Comienza importando la librería TransaccionCompleta Mall, y a continuación, crea la transacción necesaria.
+</p>
+
+<pre>
+    <code class="language-csharp mb-32">
+const tx = new MallFullTransaction(
+  new Options(
+    IntegrationCommerceCodes.TRANSACCION_COMPLETA_MALL,
+    IntegrationApiKeys.WEBPAY,
+    Environment.Integration
+  )
+);
+
+var details = new List<CreateDetails>
+{
+  new CreateDetails(1000, IntegrationCommerceCodes.TRANSACCION_COMPLETA_MALL_CHILD1, "O-123"),
+  new CreateDetails(1000, IntegrationCommerceCodes.TRANSACCION_COMPLETA_MALL_CHILD2, "O-456")
+};
+
+const response = await tx.create(
+  buyOrder,
+  sessionId,
+  cardNumber,
+  cardExpirationDate,
+  details,
+  cvv
+); 
+    </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">
+    Una vez creada la transacción, recibirás los siguientes datos de respuesta:
+</p>
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.response)</code></pre>
+
+<h2 id="form">¡Transacción creada!</h2>
+<p class="mb-16">Ahora que hemos creado la transacción, se abren dos opciones para continuar:</p>
+<ul class="bullet-list mb-32">
+    <li>
+        <strong>Consultar Cuotas (opcional):</strong> Alternativamente puedes realizar consultas de cuotas para ofrecer opciones de pago a plazos.
+    </li>
+    <li>
+        <strong>Confirmar Transacción:</strong> Debes confirmar directamente la transacción para finalizar con el proceso de pago.
+    </li>
+</ul>
+
+<form method="POST">
+    <div class="tbk-card">
+        <span class="tbk-card-title">Formulario de redirección</span>
+        
+        <div class="input-container">
+            <label for="installments_number" class="tbk-label">N° de cuotas:</label>
+            <input type="text" id="installments_number" name="installments_number" class="tbk-input-text" value="@ViewBag.InstallmentsNumber">
+        </div>
+
+        <div class="tbk-card-footer">
+            <button type="submit" 
+                    asp-controller="TransaccionCompletaMall" 
+                    asp-action="Installments" 
+                    asp-route-token="@ViewBag.Token"
+                    class="tbk-button primary mr-16">
+                CONSULTAR CUOTAS
+            </button>
+
+            <button type="submit" 
+                    asp-controller="TransaccionCompletaMall" 
+                    asp-action="Commit" 
+                    asp-route-token="@ViewBag.Token"
+                    class="tbk-button primary">
+                CONFIRMAR
+            </button>
+        </div>
+    </div>
+</form>
