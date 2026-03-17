@@ -73,12 +73,13 @@ const response = await tx.create(
 </ul>
 
 <form method="POST">
+    @Html.AntiForgeryToken()
     <div class="tbk-card">
         <span class="tbk-card-title">Formulario de redirección</span>
         
         <div class="input-container">
             <label for="installments_number" class="tbk-label">N° de cuotas:</label>
-            <input type="text" id="installments_number" name="installments_number" class="tbk-input-text" value="@ViewBag.InstallmentsNumber">
+            <input type="number" id="installments_number" name="installments_number" class="tbk-input-text" value="@ViewBag.InstallmentsNumber">
         </div>
 
         <div class="tbk-card-footer">

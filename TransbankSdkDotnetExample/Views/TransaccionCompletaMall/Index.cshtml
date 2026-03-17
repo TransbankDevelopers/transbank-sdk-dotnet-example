@@ -19,6 +19,7 @@
 </p>
 <div class="tbk-shadow-2 tbk-card large ">
     <form id="card-form" method="POST" action="/transaccion-completa-mall/create">
+        @Html.AntiForgeryToken()
         <div class="card-container">
 
             <div class="card-wrapper mb-4"></div>

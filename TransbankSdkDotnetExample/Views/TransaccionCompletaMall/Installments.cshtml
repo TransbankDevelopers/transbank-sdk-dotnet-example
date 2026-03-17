@@ -54,6 +54,7 @@ const response = await tx.installments(token, details);
 <p class="mb-16">Si decides utilizar cuotas y estás satisfecho con las condiciones obtenidas en la consulta, el siguiente paso sería confirmar la transacción.</p>
 
 <form asp-controller="TransaccionCompletaMall" asp-action="Commit" asp-route-token="@ViewBag.Token" method="post" class="tbk-form">
+    @Html.AntiForgeryToken()
     <div class="tbk-card">
         <div class="input-container mb-16">
             <label for="token" class="tbk-label">Token</label>

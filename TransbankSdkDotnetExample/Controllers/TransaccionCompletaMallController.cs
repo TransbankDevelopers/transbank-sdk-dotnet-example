@@ -33,11 +33,12 @@ public class TransaccionCompletaMallController : Controller
     }
 
     [HttpPost("create")]
-    public IActionResult Create(string number, string cvc, string expiry)
+    [ValidateAntiForgeryToken]
+    public IActionResult Create([FromForm(Name = "number")] string cardNumber, string cvc, string expiry)
     {
         try
         {
-            var cardNumberClean = number.Replace(" ", "");
+            var cardNumberClean = cardNumber.Replace(" ", "");
             var parts = expiry.Split('/');
             var cardExpiryFormatted = $"{parts[1]}/{parts[0]}";
 
@@ -82,6 +83,7 @@ public class TransaccionCompletaMallController : Controller
     }
 
     [HttpPost("installments")]
+    [ValidateAntiForgeryToken]
     public IActionResult Installments(string token, [FromForm(Name = "installments_number")] int installmentsNumber)
     {
         try
@@ -109,6 +111,7 @@ public class TransaccionCompletaMallController : Controller
     }
 
     [HttpPost("commit")]
+    [ValidateAntiForgeryToken]
     public IActionResult Commit(string token, int? idQueryInstallments, int? deferredPeriodIndex, bool gracePeriod)
     {
         try
