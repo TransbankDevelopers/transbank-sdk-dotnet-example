@@ -1,0 +1,107 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Consulta de cuotas";
+}
+
+<div class="breadcrumbs-container">
+    <div class="breadcrumbs-items">
+        <a href="/">Inicio</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <a href="/transaccion-completa-mall/index">Webpay Transacción Completa Mall</a>
+        <img src="~/t-arrow.svg" alt="t-arrow" width="24" height="24" />
+    </div>
+    <div class="breadcrumbs-items">
+        <span class="current-breadcrumb">Consulta de cuotas</span>
+    </div>
+</div>
+
+<h1>Transacción Completa Mall - Consulta de cuotas</h1>
+<p class="mb-32">
+    En esta etapa, realizaremos una consulta de cuotas para conocer sus condiciones. Es importante destacar que este paso es opcional y se utiliza únicamente si deseas ofrecer opciones de pago a plazos.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">Para llevar a cabo la consulta de cuotas, debemos enviar los siguientes datos relevantes.</p>
+
+<pre>
+    <code class="language-csharp mb-32">
+const tx = new MallFullTransaction(
+  new Options(
+    IntegrationCommerceCodes.TRANSACCION_COMPLETA_MALL,
+    IntegrationApiKeys.WEBPAY,
+    Environment.Integration
+  )
+);
+
+var details = new List<MallInstallmentsDetails>
+{
+  new MallInstallmentsDetails("597055555574", "O-123", 3),
+  new MallInstallmentsDetails("597055555575", "O-456", 3)
+};
+
+const response = await tx.installments(token, details);
+    </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">Una vez realizada la consulta de cuotas, recibirás los siguientes datos de respuesta:</p>
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.response)</code></pre>
+
+<h2 id="form">Confirmar Transacción</h2>
+<p class="mb-16">Si decides utilizar cuotas y estás satisfecho con las condiciones obtenidas en la consulta, el siguiente paso sería confirmar la transacción.</p>
+
+<form asp-controller="TransaccionCompletaMall" asp-action="Commit" asp-route-token="@ViewBag.Token" method="post" class="tbk-form">
+    <div class="tbk-card">
+        <div class="input-container mb-16">
+            <label for="token" class="tbk-label">Token</label>
+            <input type="text" id="token" name="token" class="tbk-input-text" value="@ViewBag.Token" readonly>
+        </div>
+
+        <div class="input-container mb-16">
+            <label for="idQueryInstallments" class="tbk-label">ID de consulta de cuotas (Opcional)</label>
+            <input type="text" id="idQueryInstallments" name="idQueryInstallments" class="tbk-input-text" value="@(ViewBag.IdQueryInstallments ?? "")">
+        </div>
+
+        <div class="input-container mb-16">
+            <label for="deferredPeriodIndex" class="tbk-label">Indice de periodo diferido (opcional)</label>
+            <input type="text" id="deferredPeriodIndex" name="deferredPeriodIndex" class="tbk-input-text" value="">
+        </div>
+        <div class="input-container mb-32">
+            <label for="gracePeriod" class="tbk-label">Periodo de gracia (opcional)</label>
+            <input type="text" id="gracePeriod" name="gracePeriod" class="tbk-input-text" value="">
+        </div>
+
+        <div class="tbk-card-footer">
+            <button type="submit" class="tbk-button primary">
+                CONFIRMAR TRANSACCIÓN
+            </button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const idQueryInstallmentsInput = document.getElementById('idQueryInstallments');
+
+            try {
+                const responseRaw = `@Html.Raw(ViewBag.response)`;
+                if (responseRaw) {
+                    const response = JSON.parse(responseRaw);
+                    const details = response.Details || response.details || (response.OriginalResponse && response.OriginalResponse.details) || [];
+                    const firstDetail = details[0] || {};
+                    const idQueryInstallments = firstDetail.IdQueryInstallments || firstDetail.id_query_installments;
+
+                    if (idQueryInstallments) {
+                        idQueryInstallmentsInput.value = idQueryInstallments;
+                    }
+                }
+            } catch (e) {
+                console.error('Error al parsear la respuesta:', e);
+            }
+        });
+    </script>
+}
