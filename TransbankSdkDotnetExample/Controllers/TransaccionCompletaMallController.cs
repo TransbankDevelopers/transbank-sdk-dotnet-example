@@ -82,13 +82,17 @@ public class TransaccionCompletaMallController : Controller
     }
 
     [HttpPost("installments")]
-    public IActionResult Installments(string token, int installments_number)
+    public IActionResult Installments(string token, [FromForm(Name = "installments_number")] int installmentsNumber)
     {
         try
         {
             var detailSessions = GetDetailsFromSession(SessionDetailsKey);
+            if (!detailSessions.Any())
+            {
+                return View(ErrorPagePath, model: "Debes crear la transacción antes de consultar cuotas.");
+            }
             var details = detailSessions
-                .Select(d => new MallInstallmentsDetails(d.CommerceCode, d.BuyOrder, installments_number))
+                .Select(d => new MallInstallmentsDetails(d.CommerceCode, d.BuyOrder, installmentsNumber))
                 .ToList();
 
             MallInstallmentsDetailsResponse response = _transaction.Installments(token, details);
@@ -110,6 +114,10 @@ public class TransaccionCompletaMallController : Controller
         try
         {
             var detailSessions = GetDetailsFromSession(SessionDetailsKey);
+            if (!detailSessions.Any())
+            {
+                return View(ErrorPagePath, model: "Debes crear la transacción antes de confirmar.");
+            }
             var details = detailSessions
                 .Select(d => new MallCommitDetails(d.CommerceCode, d.BuyOrder, idQueryInstallments, deferredPeriodIndex, gracePeriod))
                 .ToList();
@@ -129,11 +137,15 @@ public class TransaccionCompletaMallController : Controller
     }
 
     [HttpGet("refund")]
-    public IActionResult Refund(string token, string buy_order, string commerce_code, int amount)
+    public IActionResult Refund(
+        string token,
+        [FromQuery(Name = "buy_order")] string buyOrder,
+        [FromQuery(Name = "commerce_code")] string commerceCode,
+        int amount)
     {
         try
         {
-            MallRefundResponse response = _transaction.Refund(token, buy_order, commerce_code, amount);
+            MallRefundResponse response = _transaction.Refund(token, buyOrder, commerceCode, amount);
             ViewBag.response = JsonSerializer.Serialize(ResponseUtils.ToMap(response), new JsonSerializerOptions { WriteIndented = true });
             ViewBag.Token = token;
             return View();
