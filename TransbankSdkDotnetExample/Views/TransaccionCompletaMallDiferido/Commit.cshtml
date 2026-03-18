@@ -59,13 +59,13 @@ const response = await tx.commit(token, details);
 
 @foreach (var detail in (IEnumerable<MallDetailSession>)ViewBag.Details)
 {
-    <form asp-controller="TransaccionCompletaMallDiferido" asp-action="Capture" method="GET">
+    <form asp-controller="TransaccionCompletaMallDiferido" asp-action="Capture" method="GET" data-loading-form="true">
         <div class="tbk-card">
             <span class="tbk-card-title">Capturar</span>
             <div class="input-container mb-32">
-                <label for="child_buy_order" class="tbk-label">Orden de compra hijo</label>
+                <label for="child_buy_order" class="tbk-label">Orden de compra (tienda)</label>
                 <input type="text" name="child_buy_order" class="tbk-input-text mb-16" value="@detail.BuyOrder">
-                <label for="child_commerce_code" class="tbk-label">Commerce Code hijo</label>
+                <label for="child_commerce_code" class="tbk-label">Commerce Code (tienda)</label>
                 <input type="text" name="child_commerce_code" class="tbk-input-text mb-16" value="@detail.CommerceCode">
                 <label for="authorization_code" class="tbk-label">Código de autorización</label>
                 <input type="text" name="authorization_code" class="tbk-input-text mb-16" value="@detail.AuthorizationCode">
@@ -75,7 +75,10 @@ const response = await tx.commit(token, details);
             </div>
 
             <div class="tbk-card-footer">
-                <button type="submit" class="tbk-button primary">CAPTURAR</button>
+                <button type="submit" class="tbk-button primary loading-button" data-loading-button="true">
+                    <span class="loading-spinner" aria-hidden="true"></span>
+                    <span>CAPTURAR</span>
+                </button>
             </div>
         </div>
     </form>
