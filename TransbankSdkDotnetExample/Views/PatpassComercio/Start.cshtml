@@ -1,0 +1,93 @@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="breadcrumbs-container">
+    <div class="breadcrumbs-items"><a href="/">Inicio</a> &gt;</div>
+    <div class="breadcrumbs-items"><span class="current-breadcrumb">Patpass Comercio</span></div>
+</nav>
+
+<h1>Patpass Comercio - Iniciar Transacción</h1>
+<p class="mb-16">
+    En este paso inicial, procederemos a inscribir una tarjeta con el objetivo de obtener un identificador único.
+    Esto nos permitirá redirigir al Tarjetahabiente hacia el formulario de inscripción en el siguiente paso.
+</p>
+<p class="mb-32">Todas las transacciones de este proyecto ejemplo son realizadas en ambiente de integración.</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">
+    Para comenzar, importa la librería PatpassComercio y luego inicia una inscripción. Tener en cuenta: actualmente,
+    el ambiente de integración no admite direcciones locales en los atributos <code>returnUrl</code> y <code>finalUrl</code>.
+</p>
+
+<pre>
+  <code class="language-csharp mb-32">
+var inscription = Inscription.buildForIntegration(commerceCode, apiKey);
+var response = inscription.Start(
+    returnUrl,
+    name,
+    lastName,
+    secondLastName,
+    rut,
+    serviceId,
+    finalUrl,
+    maxAmount,
+    phone,
+    cellPhone,
+    patpassName,
+    personEmail,
+    commerceEmail,
+    address,
+    city
+);
+  </code>
+</pre>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<p class="mb-32">Una vez iniciada la inscripción, recibirás los siguientes datos de respuesta:</p>
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.ResponseJson)</code></pre>
+
+<h2 id="form">Paso 3: Creación del formulario</h2>
+<p class="mb-32">
+    Utiliza los datos obtenidos durante la inscripción para generar un formulario, proporcionando al
+    Tarjetahabiente una experiencia de inscripción fluida y segura.
+</p>
+
+<pre>
+  <code class="language-html mb-32">
+&lt;form action="patpass_url" method="POST"&gt;
+  &lt;input type="hidden" name="tokenComercio" value="token recibido" /&gt;
+  &lt;input type="submit" value="Inscribir" /&gt;
+&lt;/form&gt;
+  </code>
+</pre>
+
+<h2 id="example">Ejemplo</h2>
+<p class="mb-32">Para poder iniciar la inscripción, se necesitan los siguientes datos:</p>
+
+<div class="mb-32">
+    <div class="tbk-table">
+        <div class="table-column tbk-head">Campo</div>
+        <div class="table-column tbk-head">Valor</div>
+        @foreach (var item in ViewBag.RequestData)
+        {
+            <div class="table-column">@item.Key</div>
+            <div class="table-column">@item.Value</div>
+        }
+    </div>
+</div>
+
+<form action="@ViewBag.Url" method="POST">
+    <div class="tbk-card">
+        <span class="tbk-card-title">Formulario de redirección</span>
+        <div class="input-container mb-32">
+            <label for="tokenComercio" class="tbk-label">Token</label>
+            <input type="text" id="tokenComercio" class="tbk-input-text" value="@ViewBag.Token" disabled />
+            <input type="hidden" name="tokenComercio" value="@ViewBag.Token" />
+        </div>
+        <div class="tbk-card-footer">
+            <button class="tbk-button primary">INSCRIBIR</button>
+        </div>
+    </div>
+</form>

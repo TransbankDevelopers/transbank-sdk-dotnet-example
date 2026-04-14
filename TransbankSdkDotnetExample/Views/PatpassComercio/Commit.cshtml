@@ -1,0 +1,65 @@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="breadcrumbs-container">
+    <div class="breadcrumbs-items"><a href="/">Inicio</a> &gt;</div>
+    <div class="breadcrumbs-items"><a href="/patpass-comercio">Patpass Comercio</a> &gt;</div>
+    <div class="breadcrumbs-items"><span class="current-breadcrumb">Confirmar registro</span></div>
+</nav>
+
+<h1>Patpass Comercio - Confirmar Registro</h1>
+<p class="mb-32">
+    Es necesario confirmar el registro; esto solo se puede hacer una sola vez o retornará error.
+</p>
+
+<h2 id="request">Paso 1: Datos recibidos</h2>
+<p class="mb-32">
+    Luego de que se termina el flujo en el formulario de inscripción recibirás un POST con la siguiente respuesta.
+</p>
+
+<pre>
+  <code class="language-json mb-32">
+{
+  "J_TOKEN": "@ViewBag.Token"
+}
+  </code>
+</pre>
+
+<h2 id="petition">Paso 2: Petición</h2>
+<p class="mb-32">
+    Usarás el token recibido para confirmar la inscripción usando el método <code>Status</code> de PatpassComercio.
+</p>
+
+<pre>
+  <code class="language-csharp mb-32">
+var inscription = Inscription.buildForIntegration(commerceCode, apiKey);
+var response = inscription.Status(token);
+  </code>
+</pre>
+
+<h2 id="response">Paso 3: Respuesta</h2>
+<p class="mb-32">
+    Transbank contestará con lo siguiente. Debes guardar esta información; lo importante es validar que
+    el atributo <code>authorized</code> sea igual a <code>true</code>.
+</p>
+
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.ResponseJson)</code></pre>
+
+<h2 id="form">¡Listo!</h2>
+<p class="mb-32">Una vez realizada la inscripción y confirmada, puedes visualizar el voucher.</p>
+
+<div class="tbk-card">
+    <span class="tbk-card-title">Formulario de redirección</span>
+    <div class="input-container mb-32">
+        <label for="tokenComercio" class="tbk-label">Token</label>
+        <input type="text" id="tokenComercio" class="tbk-input-text" value="@ViewBag.Token" disabled />
+    </div>
+    <div class="tbk-card-footer">
+        <form action="@ViewBag.VoucherUrl" method="POST">
+            <input type="hidden" name="tokenComercio" value="@ViewBag.Token" />
+            <button class="tbk-button primary">VER VOUCHER</button>
+        </form>
+    </div>
+</div>
