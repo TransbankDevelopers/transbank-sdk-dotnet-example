@@ -1,4 +1,7 @@
 using TransbankSdkDotnetExample.Components;
+using TransbankSdkDotnetExample.Utils;
+
+DotEnv.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
 
 var builder = WebApplication.CreateBuilder(args);
 
