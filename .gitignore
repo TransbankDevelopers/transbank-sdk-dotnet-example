@@ -80,3 +80,5 @@ _[Ss]cripts
 .idea/*
 .idea
 .idea/
+.env
+**/.env
