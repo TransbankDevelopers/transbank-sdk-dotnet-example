@@ -1,0 +1,38 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="breadcrumbs-container">
+  <div class="breadcrumbs-items"><a href="@Url.Action("Index", "Home")" >Inicio</a>  &gt;</div>
+  <div class="breadcrumbs-items"><a href="@Url.Action("Start", "PromotionsOneclickMall")" >Webpay Oneclick Mall Promociones</a> &gt; </div>
+  <div class="breadcrumbs-items"><span class="current-breadcrumb">Consulta servicio de bines</span></div>
+</nav>
+
+<h1>Webpay Oneclick Mall Promociones - Consulta servicio de bines</h1>
+<p class="mb-32">
+  Con esta operación puedes consultar el BIN asociado al medio de pago inscrito usando el valor de
+  <code>tbk_user</code>.
+</p>
+
+<h2 id="request">Paso 1: Petición</h2>
+<p class="mb-32">
+  Para realizar la consulta, necesitarás el <code>tbk_user</code> obtenido al finalizar la inscripción.
+</p>
+
+<pre>
+  <code class="language-csharp mb-32">
+  var response = binInfo.QueryBin(tbkUser);
+  </code>
+</pre>
+
+<div class="mb-32">
+  <div class="tbk-table">
+    <div class="table-column tbk-head">Campo</div>
+    <div class="table-column tbk-head">Valor</div>
+    <div class="table-column">tbk_user</div>
+    <div class="table-column">@ViewBag.TbkUser</div>
+  </div>
+</div>
+
+<h2 id="response">Paso 2: Respuesta</h2>
+<pre><code class="language-json mb-32">@Html.Raw(ViewBag.ResponseJson)</code></pre>
