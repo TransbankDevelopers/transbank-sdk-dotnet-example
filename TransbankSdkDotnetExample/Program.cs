@@ -1,5 +1,7 @@
 using TransbankSdkDotnetExample.Components;
 
+DotNetEnv.Env.TraversePath().Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDistributedMemoryCache(); 
