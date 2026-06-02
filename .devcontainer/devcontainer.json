@@ -1,0 +1,60 @@
+{
+    "name": "Transbank SDK .NET Example",
+    "image": "mcr.microsoft.com/devcontainers/dotnet:1-9.0-bookworm",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "postCreateCommand": "bash /workspaces/${localWorkspaceFolderBasename}/.devcontainer/post-create.sh",
+    "forwardPorts": [
+        5143
+    ],
+    "portsAttributes": {
+        "5143": {
+            "label": "ASP.NET Core (dotnet run)",
+            "onAutoForward": "notify"
+        }
+    },
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+    ],
+    "features": {
+        "ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
+            "plugins": "git zsh-autosuggestions zsh-syntax-highlighting",
+            "omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "explorer.confirmDelete": false,
+                "editor.bracketPairColorization.enabled": true,
+                "editor.guides.bracketPairs": true,
+                "editor.formatOnSave": true,
+                "editor.rulers": [
+                    120
+                ],
+                "files.insertFinalNewline": true,
+                "git.enableCommitSigning": false,
+                "extensions.autoUpdate": false,
+                "extensions.autoCheckUpdates": false,
+                "extensions.ignoreRecommendations": true,
+                "remote.containers.installRecommendedExtensions": false,
+                "settingsSync.enabled": false,
+                "files.watcherExclude": {
+                    "**/bin/**": true,
+                    "**/obj/**": true,
+                    "**/wwwroot/lib/**": true
+                },
+                "[csharp]": {
+                    "editor.defaultFormatter": "ms-dotnettools.csharp"
+                }
+            },
+            "extensions": [
+                "ms-dotnettools.csdevkit",
+                "ms-dotnettools.csharp",
+                "editorconfig.editorconfig",
+                "usernamehw.errorlens",
+                "Gruntfuggly.todo-tree",
+                "naumovs.color-highlight"
+            ]
+        }
+    }
+}
