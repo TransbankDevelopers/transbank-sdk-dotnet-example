@@ -19,8 +19,8 @@ La forma más simple de levantar el proyecto sin instalar nada en tu máquina (s
 
 ### Cómo levantarlo
 
-1. Abrí la carpeta del proyecto en VS Code.
-2. Ejecutá **"Dev Containers: Reopen in Container"** (paleta de comandos, `F1`).
+1. Abre la carpeta del proyecto en VS Code.
+2. Ejecuta **"Dev Containers: Reopen in Container"** (paleta de comandos, `F1`).
 3. La primera vez construye la imagen con el .NET 9 SDK (capas cacheadas) y luego corre `post-create.sh`.
 
 ### Qué corre el post-create
@@ -34,7 +34,7 @@ La forma más simple de levantar el proyecto sin instalar nada en tu máquina (s
 dotnet watch --project TransbankSdkDotnetExample/TransbankSdkDotnetExample.csproj
 ```
 
-El puerto `5143` está en `forwardPorts`, así que VS Code lo reenvía automáticamente y podés abrir la app en `http://localhost:5143`. Si el navegador no llega al puerto, agregá `--urls "http://0.0.0.0:5143"` al comando como fallback.
+El puerto `5143` está en `forwardPorts`, así que VS Code lo reenvía automáticamente y puedes abrir la app en `http://localhost:5143`. Si el navegador no llega al puerto, agrega `--urls "http://0.0.0.0:5143"` al comando como fallback.
 
 ### Notas para macOS
 
