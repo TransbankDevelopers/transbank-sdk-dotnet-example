@@ -13,4 +13,4 @@ fi
 dotnet restore
 
 # Confiar en el certificado HTTPS de desarrollo de ASP.NET Core.
-dotnet dev-certs https --trust || true
+dotnet dev-certs https --trust || echo "⚠️  Warning: Failed to trust HTTPS dev certificate. You may see browser warnings (note: --trust is not fully supported on Linux)."

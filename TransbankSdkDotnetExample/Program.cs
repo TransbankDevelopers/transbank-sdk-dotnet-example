@@ -1,6 +1,6 @@
 using TransbankSdkDotnetExample.Components;
 
-DotNetEnv.Env.TraversePath().Load();
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
