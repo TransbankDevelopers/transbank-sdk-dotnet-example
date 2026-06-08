@@ -81,3 +81,7 @@ _[Ss]cripts
 .idea
 .idea/
 **/appsettings.Development.json
+
+# Variables de entorno locales (.env). El template .env.example SÍ se versiona.
+**/.env
+!**/.env.example

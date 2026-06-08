@@ -6,9 +6,42 @@ Proyecto de ejemplo mostrando el paso a paso de como usar el SDK .NET para produ
 
 ## Requisitos
 
--   .NET SDK 8.0
+-   .NET SDK 9.0
 
-## Iniciar en modo desarrollo 
+## Desarrollo con Dev Container (recomendado)
+
+La forma más simple de levantar el proyecto sin instalar nada en tu máquina (salvo Docker) es usar el Dev Container incluido.
+
+### Requisitos
+
+-   [Docker](https://www.docker.com/)
+-   Visual Studio Code con la extensión [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+### Cómo levantarlo
+
+1. Abre la carpeta del proyecto en VS Code.
+2. Ejecuta **"Dev Containers: Reopen in Container"** (paleta de comandos, `F1`).
+3. La primera vez construye la imagen con el .NET 9 SDK (capas cacheadas) y luego corre `post-create.sh`.
+
+### Qué corre el post-create
+
+-   `dotnet restore` — restaura las dependencias de la solución.
+-   `dotnet dev-certs https --trust` — confía el certificado HTTPS de desarrollo.
+
+### Ejecutar la app dentro del contenedor
+
+```bash
+dotnet watch --project TransbankSdkDotnetExample/TransbankSdkDotnetExample.csproj
+```
+
+El puerto `5143` está en `forwardPorts`, así que VS Code lo reenvía automáticamente y puedes abrir la app en `http://localhost:5143`. Si el navegador no llega al puerto, agrega `--urls "http://0.0.0.0:5143"` al comando como fallback.
+
+### Notas para macOS
+
+-   El montaje del código usa `consistency=cached` para mejorar el rendimiento de E/S de archivos.
+-   Si el primer build es lento, es normal: solo ocurre una vez (las capas quedan cacheadas).
+
+## Iniciar en modo desarrollo
 
 Para poder correr el proyecto en modo desarrollo, debes utilizar los siguientes comandos en una consola:
 

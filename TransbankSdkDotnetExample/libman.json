@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "card@2.5.0",
+      "destination": "wwwroot/lib/card/",
+      "files": [
+        "card.min.js"
+      ]
+    }
+  ]
+}
