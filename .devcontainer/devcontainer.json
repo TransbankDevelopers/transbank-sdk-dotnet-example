@@ -1,10 +1,17 @@
 {
     "name": "Transbank SDK .NET Example",
-    "image": "mcr.microsoft.com/devcontainers/dotnet:1-9.0-bookworm",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    "postCreateCommand": "bash /workspaces/${localWorkspaceFolderBasename}/.devcontainer/post-create.sh",
+    "postCreateCommand": "bash .devcontainer/post-create.sh",
     "forwardPorts": [
         5143
+    ],
+    "remoteUser": "vscode",
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
     ],
     "portsAttributes": {
         "5143": {
@@ -24,24 +31,45 @@
                 "explorer.confirmDelete": false,
                 "editor.bracketPairColorization.enabled": true,
                 "editor.guides.bracketPairs": true,
+                "editor.guides.bracketPairsHorizontal": true,
+                "editor.linkedEditing": true,
+                "editor.codeLens": true,
+                "editor.inlineSuggest.enabled": true,
                 "editor.formatOnSave": true,
+                "editor.suggestSelection": "first",
                 "editor.rulers": [
                     120
                 ],
+                "todo-tree.ripgrep.ripgrep": "/usr/bin/rg",
                 "files.insertFinalNewline": true,
+                "files.trimTrailingWhitespace": true,
                 "git.enableCommitSigning": false,
                 "extensions.autoUpdate": false,
                 "extensions.autoCheckUpdates": false,
                 "extensions.ignoreRecommendations": true,
                 "remote.containers.installRecommendedExtensions": false,
                 "settingsSync.enabled": false,
+                "dotnet.defaultSolution": "TransbankSdkDotnetExample.sln",
+                "csharp.suppressDotnetRestoreNotification": true,
                 "files.watcherExclude": {
                     "**/bin/**": true,
                     "**/obj/**": true,
                     "**/wwwroot/lib/**": true
                 },
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "terminal.integrated.profiles.linux": {
+                    "zsh": {
+                        "path": "/usr/bin/zsh"
+                    }
+                },
                 "[csharp]": {
-                    "editor.defaultFormatter": "ms-dotnettools.csharp"
+                    "editor.formatOnSave": true
+                },
+                "[json]": {
+                    "editor.defaultFormatter": "vscode.json-language-features"
+                },
+                "[xml]": {
+                    "editor.defaultFormatter": "redhat.vscode-xml"
                 }
             },
             "extensions": [
@@ -50,7 +78,11 @@
                 "editorconfig.editorconfig",
                 "usernamehw.errorlens",
                 "Gruntfuggly.todo-tree",
-                "naumovs.color-highlight"
+                "naumovs.color-highlight",
+                "yzhang.markdown-all-in-one",
+                "github.vscode-github-actions",
+                "ms-azuretools.vscode-docker",
+                "redhat.vscode-xml"
             ]
         }
     }
