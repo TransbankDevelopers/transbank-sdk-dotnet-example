@@ -11,7 +11,7 @@ Esta versión elimina del menú lateral el producto producto OneClick Mall Promo
 
 ### Elimina
 
-- Se agrega del menú lateral el producto OneClick Mall Promociones
+- Se elimina del menú lateral el producto OneClick Mall Promociones
 
 ## [1.1.0] - 31-12-2025
 
