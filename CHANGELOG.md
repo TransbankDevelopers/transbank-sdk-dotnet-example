@@ -5,6 +5,14 @@ Toda la historia de cambios de este proyecto será documentada en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 03-09-2026
+
+Esta versión elimina del menú lateral el producto OneClick Mall Promociones
+
+### Elimina
+
+- Se elimina del menú lateral el producto OneClick Mall Promociones
+
 ## [1.1.0] - 31-12-2025
 
 Esta versión agrega soporte para el producto OneClick Mall.
