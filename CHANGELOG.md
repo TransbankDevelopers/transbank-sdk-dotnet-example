@@ -7,7 +7,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [1.1.1] - 03-09-2026
 
-Esta versión elimina del menú lateral el producto producto OneClick Mall Promociones.
+Esta versión elimina del menú lateral el producto OneClick Mall Promociones
 
 ### Elimina
 
