@@ -3,7 +3,7 @@ set -e
 
 echo "📂 current dir: $(pwd)"
 
-if [ ! -f TransbankSdkDotnetExample/.env ]; then
+if [[ ! -f TransbankSdkDotnetExample/.env ]]; then
     cp TransbankSdkDotnetExample/.env.example TransbankSdkDotnetExample/.env
 fi
 
