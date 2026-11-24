@@ -1,11 +1,10 @@
 {
     "name": "Transbank SDK .NET Example",
-    "build": {
-        "dockerfile": "Dockerfile",
-        "context": ".."
-    },
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    "postCreateCommand": "bash .devcontainer/post-create.sh",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspaces/transbank-sdk-dotnet-example",
+    "postCreateCommand": "bash /workspaces/transbank-sdk-dotnet-example/.devcontainer/post-create.sh",
+    "shutdownAction": "stopCompose",
     "forwardPorts": [
         5143
     ],
