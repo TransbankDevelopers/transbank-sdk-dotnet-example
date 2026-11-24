@@ -6,3 +6,13 @@ services:
     command: sleep infinity
     volumes:
       - ..:/workspaces/transbank-sdk-dotnet-example:cached
+      - app_bin:/workspaces/transbank-sdk-dotnet-example/TransbankSdkDotnetExample/bin
+      - app_obj:/workspaces/transbank-sdk-dotnet-example/TransbankSdkDotnetExample/obj
+      - tests_bin:/workspaces/transbank-sdk-dotnet-example/Tests/bin
+      - tests_obj:/workspaces/transbank-sdk-dotnet-example/Tests/obj
+
+volumes:
+  app_bin:
+  app_obj:
+  tests_bin:
+  tests_obj:
